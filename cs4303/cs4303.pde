@@ -3,17 +3,32 @@ ArrayList<Block> headerBlocks;
 ArrayList<ArrayList<Block>> bodyBlocks;
 Block header;
 Block body;
+float portionHeader = 0.1;
 
-float portionHeader = 0.15;
 
+//Game status
 String[] possibleViews = {"LocStart", "InConvo", "DoingPuzzle", "EventEnd"};
 int currentView;
+
+int currentDay;
+
+String[] possibleLocations = {"Dorm Room", "Econometrics Lecture", "Disney Pub Quiz"};
+int currentLoc;
+
+int startTime;
+int sleepTime;
+int currentTime;
 
 void setup() {
   
   fullScreen();
   
   currentView = 0;
+  currentDay = 1;
+  currentLoc = 0;
+  startTime = 8;
+  sleepTime = 22;
+  currentTime = 8;
   
   //Make the Blocks in the header
   headerBlocks = new ArrayList();

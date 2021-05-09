@@ -8,6 +8,6 @@ class Clock extends Block {
     
     fill(0, 102, 153);
     textAlign(CENTER, CENTER);
-    text("clock", position.x + (width/2), position.y + (height/2));
+    text((currentTime < 10 ? "0" : "") + currentTime + ":00", position.x + (width/2), position.y + (height/2));
   }
 }
