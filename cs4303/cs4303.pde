@@ -12,11 +12,7 @@ int currentView;
 
 int currentDay;
 
-Event[] possibleLocations = {
-  new Event("Dorm Room"), 
-  new Event("Econometrics Lecture"), 
-  new Event("Disney Pub Quiz")
-};
+Event[] possibleLocations;
 int currentLoc;
 
 int startTime;
@@ -33,6 +29,12 @@ void setup() {
   startTime = 8;
   sleepTime = 22;
   currentTime = 8;
+  
+  possibleLocations = new Event[]{
+  new Event("Dorm Room", startTime, sleepTime), 
+  new Event("Econometrics Lecture", startTime + 1, startTime + 2), 
+  new Event("Disney Pub Quiz", sleepTime-2, sleepTime-1)
+};
   
   //Make the Blocks in the header
   headerBlocks = new ArrayList();
