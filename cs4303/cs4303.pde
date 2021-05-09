@@ -12,7 +12,7 @@ int currentView;
 
 int currentDay;
 
-Event[] possibleLocations;
+Event[] possibleEvents;
 int currentLoc;
 
 int startTime;
@@ -30,7 +30,7 @@ void setup() {
   sleepTime = 22;
   currentTime = 8;
   
-  possibleLocations = new Event[]{
+  possibleEvents = new Event[]{
   new Event("Dorm Room", startTime, sleepTime), 
   new Event("Econometrics Lecture", startTime + 1, startTime + 2), 
   new Event("Disney Pub Quiz", sleepTime-2, sleepTime-1)
