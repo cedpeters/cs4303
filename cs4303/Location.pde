@@ -1,13 +1,7 @@
-class Location extends Block {
-  public Location(float x, float y, float width, float height) {
-    super(x, y, width, height);
-  }
+class Event {
+  String name;
   
-  void draw() {
-    super.draw();
-    
-    fill(0, 102, 153);
-    textAlign(CENTER, CENTER);
-    text(possibleLocations[currentLoc], position.x + (width/2), position.y + (height/2));
+  public Event(String name) {
+    this.name = name;
   }
 }

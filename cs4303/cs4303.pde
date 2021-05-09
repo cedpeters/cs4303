@@ -12,7 +12,11 @@ int currentView;
 
 int currentDay;
 
-String[] possibleLocations = {"Dorm Room", "Econometrics Lecture", "Disney Pub Quiz"};
+Event[] possibleLocations = {
+  new Event("Dorm Room"), 
+  new Event("Econometrics Lecture"), 
+  new Event("Disney Pub Quiz")
+};
 int currentLoc;
 
 int startTime;
@@ -37,7 +41,7 @@ void setup() {
   
   Block clock = new Clock(header.position.x, header.position.y, header.width * 0.33, header.height);
   Block day = new Day(clock.position.x + clock.width, header.position.y, header.width * 0.33, header.height);
-  Block location = new Location(day.position.x + day.width, header.position.y, header.width - (clock.width + day.width), header.height);
+  Block location = new LocationBlock(day.position.x + day.width, header.position.y, header.width - (clock.width + day.width), header.height);
   
   //blocks.add(header);
   headerBlocks.add(clock);
