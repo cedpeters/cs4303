@@ -5,9 +5,13 @@ class Schedule extends Block {
   
   void draw() {
     super.draw();
-    
+        
     fill(0, 102, 153);
     textAlign(CENTER, CENTER);
-    text("Schedule", position.x + (width/2), position.y + (height/2));
+    
+    for(int n = 0; n <= (sleepTime - startTime); n++) {
+     text((n + startTime < 10 ? "0" : "") + (n + startTime) + ":00", position.x + 20, position.y + 10 + (height * n / (sleepTime - startTime + 1))); 
+    }
+    
   }
 }

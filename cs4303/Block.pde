@@ -7,7 +7,6 @@ class Block {
   public float height;
     
   public Block(float x, float y, float width, float height) {
-    System.out.println("MADE A BLOCK");
     this.position = new PVector(x, y);
     this.width = width;
     this.height = height;
