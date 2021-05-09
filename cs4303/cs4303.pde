@@ -31,9 +31,10 @@ void setup() {
   currentTime = 8;
   
   possibleEvents = new Event[]{
-  new Event("Dorm Room", startTime, sleepTime), 
-  new Event("Econometrics Lecture", startTime + 1, startTime + 2), 
-  new Event("Disney Pub Quiz", sleepTime-2, sleepTime-1)
+  new Event("Dorm Room", startTime, sleepTime - 1),
+  new Event("Econometrics Lecture", 9, 10),
+  new Event("Disney Pub Quiz", sleepTime-2, sleepTime-1),
+  new Event("Club 601", sleepTime - 4, sleepTime - 1)
 };
   
   //Make the Blocks in the header

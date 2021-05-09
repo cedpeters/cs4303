@@ -15,29 +15,39 @@ class Schedule extends Block {
     }
     
     int[][] timeSlots = new int[3][sleepTime - startTime + 1];
-    System.out.println("LENGTH OF FIRST: " + timeSlots.length);
-    System.out.println("LENGTH OF SECOND: " + timeSlots[0].length);
     for(Event event : possibleEvents) {
+      
+      System.out.println("EVENT: " + event.location);
             
-      boolean foundOne = false;
+      boolean foundOne = true;
       
       //Loop through possible columns
       for(int i = 0; i < timeSlots.length; i++) {
-        for(int j = event.startTime - startTime; j <= event.endTime - startTime; j++) {
-          if(timeSlots[i][j] == 1) break;
+        System.out.println("COLUMN: " + i);
+        for(int j = event.startTime - startTime; j < event.endTime - startTime; j++) {
+          System.out.println("TIME: " + (j + startTime));
+          if(timeSlots[i][j] == 1) {
+           System.out.println("ALREADY FULL");
+           foundOne = false;
+           break;
+          }
         }
         if(foundOne) {
-          for(int j = event.startTime; j <= event.endTime; j++) {
+          System.out.println("FOUND ONE!");
+          for(int j = event.startTime - startTime; j < event.endTime - startTime; j++) {
             timeSlots[i][j] = 1;
           }
-          todo this is where I stopped.
-          rect(position.x + (width * i/4), position.y, width, height);
+          
+          fill(color(100,100,100));
+          
+          rect(position.x + (width * (i + 1)/4), position.y + ((event.startTime - startTime) * height/(sleepTime-startTime)), width/4, (event.endTime - event.startTime) * height/(sleepTime-startTime));
           
           break;
         }
+        else foundOne = true;
       }
-      
       if(!foundOne) System.out.println("ERROR WITH SCHEDULING"); //TODO: DEAL WITH THIS PROPERLY
+      foundOne = true;
     }
   }
 }
