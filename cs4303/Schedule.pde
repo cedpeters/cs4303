@@ -5,6 +5,8 @@ class Schedule extends Block {
   
   void draw() {
     super.draw();
+    
+    ArrayList<InfoFlag> entries = new ArrayList();
         
     fill(0, 102, 153);
     textAlign(CENTER, CENTER);
@@ -16,9 +18,7 @@ class Schedule extends Block {
     
     int[][] timeSlots = new int[3][sleepTime - startTime + 1];
     for(Event event : possibleEvents) {
-      
-      System.out.println("EVENT: " + event.location);
-            
+                  
       boolean foundOne = true;
       
       //Loop through possible columns
@@ -38,10 +38,8 @@ class Schedule extends Block {
             timeSlots[i][j] = 1;
           }
           
-          fill(color(100,100,100));
-          
-          rect(position.x + (width * (i + 1)/4), position.y + ((event.startTime - startTime) * height/(sleepTime-startTime)), width/4, (event.endTime - event.startTime) * height/(sleepTime-startTime));
-          
+          entries.add(new InfoFlag(position.x + (width * (i + 1)/4), position.y + ((event.startTime - startTime) * height/(sleepTime-startTime)), width/4, (event.endTime - event.startTime) * height/(sleepTime-startTime), event.location));
+
           break;
         }
         else foundOne = true;
@@ -49,5 +47,7 @@ class Schedule extends Block {
       if(!foundOne) System.out.println("ERROR WITH SCHEDULING"); //TODO: DEAL WITH THIS PROPERLY
       foundOne = true;
     }
+    
+    for(InfoFlag f : entries) f.draw();
   }
 }

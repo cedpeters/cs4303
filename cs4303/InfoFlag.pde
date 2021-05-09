@@ -11,6 +11,7 @@ class InfoFlag extends Block {
     
     fill(0, 102, 153);
     textAlign(CENTER, CENTER);
-    text(info, position.x + (width/2), position.y + (height/2));
+    text(info, position.x, position.y, width, height);
+    //text(info, position.x + (width/2), position.y + (height/2));
   }
 }
