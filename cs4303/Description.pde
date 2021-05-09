@@ -8,6 +8,6 @@ class Description extends Block {
     
     fill(0, 102, 153);
     textAlign(CENTER, CENTER);
-    text("Description", position.x + (width/2), position.y + (height/2));
+    text(possibleEvents[currentLoc].description, position.x, position.y, width, height);
   }
 }

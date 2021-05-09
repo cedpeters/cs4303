@@ -31,10 +31,10 @@ void setup() {
   currentTime = 8;
   
   possibleEvents = new Event[]{
-  new Event("Dorm Room", startTime, sleepTime - 1),
-  new Event("Econometrics Lecture", 9, 10),
-  new Event("Disney Pub Quiz", sleepTime-2, sleepTime-1),
-  new Event("Club 601", sleepTime - 4, sleepTime - 1)
+  new Event("Dorm Room", startTime, sleepTime - 1, "Welcome to your dorm room! This is your safe, quiet space. No one will bother you here (besides me, of course - no getting away from the narrator!), but you'll never get out by staying here all day every day, either."),
+  new Event("Econometrics Lecture", 9, 10, "An interesting choice. Ten minutes of chatting with your friends in exchange for 45 minutes of regretting your second subject of study."),
+  new Event("Disney Pub Quiz", sleepTime-2, sleepTime-1, "Do you know enough to win the pub quiz?"),
+  new Event("Club 601", sleepTime - 4, sleepTime - 1, "You're sticky and you have a headache, but hey - they're playing your favourite song!")
 };
   
   //Make the Blocks in the header
