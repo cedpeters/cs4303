@@ -13,6 +13,8 @@ String[] possibleViews = {"LocStart", "InConvo", "DoingPuzzle", "EventEnd"};
 int currentView;
 boolean keepOldDialogue;
 
+String[] dialogueResponseOptions;
+
 ArrayList<Event> possibleNextEvents;
 
 int currentDay;
@@ -35,7 +37,7 @@ void setup() {
   currentTime = 8;
   currentView = 0;
   keepOldDialogue = true;
-  currentDay = 1;
+  currentDay = 2;
   
   possibleNextEvents = new ArrayList();
   
@@ -132,9 +134,53 @@ void calcNextDialogue(String keyPressed) {
          latestDialogue = "C: Good morning, Enya. Welcome to your new life." +
          "\nE: Wh-where am I? What's going on?" + 
          "\nC: You're in St Andrews. It's Friday of week 4 and you're in your first day here out of many." + 
-         "\nHit your C key to continue this conversation.";
+         "\nType \'C\' to continue this conversation.";
        }
      }
+     
+     else if(currentDay == 2) {
+       
+       if(latestDialogue == null) {
+         latestDialogue = "C: Good morning and welcome to your second day in the game. Did you have a good time yesterday?";
+         
+         latestDialogue += 
+          "\n1: No, that was horrible." + 
+         "\n2: Yes, I guess."; 
+         
+         currentView = 1;
+       
+       }
+       
+       if(keyPressed == null) {
+        dialogueResponseOptions = new String[]{
+           "\nThat\'s too bad. I'm afraid you'll need to learn how to appreciate the fine points of a mundane day, if you\'re going to get out of here. Until tomorrow!",
+           "\nThat\'s good. Try to hold onto that "
+         }; 
+       }
+       
+       else {
+         
+         int numPressed = Integer.parseInt(keyPressed);
+                           
+         if(dialogueResponseOptions != null && numPressed > 0 && numPressed <= dialogueResponseOptions.length) {
+           latestDialogue += dialogueResponseOptions[numPressed - 1];
+           latestDialogue += "\nPress C to continue with your game.";
+           currentView = 3;
+           dialogueResponseOptions = null;
+         }
+         else return;
+       }
+       
+       //todo: dorm room day 2, regular dialogue after the first hour.
+     }
+     
+     /**
+     TO ADD:
+       1. The dialogue for a normal day (can either take a nap, thereby skipping the hour, or can work on the puzzle) - but why would they do that?? Maybe to skip an interaction they don't ned?
+       2. The functionality to flip into puzzle mode
+       3. "Day 2" conversation (super basic "welcome to day 2!"
+       4. "Day 3" conversation (conversation where player is confused, computer explains the rules)
+     */
    }
 }
 
@@ -146,15 +192,13 @@ void calcDialogueOptions() {
  if(currentView == 3) {
    if(keepOldDialogue == false) latestDialogue = "";
    if(possibleNextEvents.size() != 0) return;
-   latestDialogue += "\n\nChoose where you would like to be for the next hour: ";
+   latestDialogue += "\n\nChoose where you would like to be in the next hour: ";
    for(Event e : possibleEvents) {
      if(e.startTime <= currentTime + 1 && e.endTime >= currentTime + 2) {
        possibleNextEvents.add(e); //todo: clear when move to a new location
        latestDialogue += "\n" + possibleNextEvents.size() + ": " + e.location;
      }
    }
-   
-   
  }
 }
 
@@ -166,6 +210,7 @@ void advanceToNextEvent(Event e) {
   currentLoc = e;
 }
 
+//todo: will delete this, it's not actually part of the game.
 void mouseClicked() {
  currentView += 1;
  if(currentView > 3) currentView = 0;
@@ -177,6 +222,11 @@ void keyReleased() {
   try {
     int num = Character.getNumericValue(key);
     
+    if(currentView == 1) {
+     calcNextDialogue(String.valueOf(key));
+     return;
+    }
+    
     //Make sure that we're in the end of an event, choosing a new one.
     if(currentView == 3 && possibleNextEvents.size() > 0) {
       if(num > possibleNextEvents.size()) return;
@@ -184,6 +234,7 @@ void keyReleased() {
       advanceToNextEvent(possibleNextEvents.get(num - 1));
       return;
     }
+ 
   }
   
   catch(Exception e)  {System.out.println("ERROR");}
