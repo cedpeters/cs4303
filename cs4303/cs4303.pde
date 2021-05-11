@@ -1,3 +1,5 @@
+
+
 //Blocks on the screen
 ArrayList<Block> headerBlocks;
 ArrayList<ArrayList<Block>> bodyBlocks;
@@ -19,6 +21,8 @@ int startTime;
 int sleepTime;
 int currentTime;
 
+String latestDialogue;
+
 void setup() {
   
   fullScreen();
@@ -31,7 +35,7 @@ void setup() {
   currentTime = 8;
   
   possibleEvents = new Event[]{
-  new Event("Dorm Room", startTime, sleepTime - 1, "Welcome to your dorm room! This is your safe, quiet space. No one will bother you here (besides me, of course - no getting away from the narrator!), but you'll never get out by staying here all day every day, either."),
+  new DormEvent(startTime, sleepTime),
   new Event("Econometrics Lecture", 9, 10, "An interesting choice. Ten minutes of chatting with your friends in exchange for 45 minutes of regretting your second subject of study."),
   new Event("Disney Pub Quiz", sleepTime-2, sleepTime-1, "Do you know enough to win the pub quiz?"),
   new Event("Club 601", sleepTime - 4, sleepTime - 1, "You're sticky and you have a headache, but hey - they're playing your favourite song!")
@@ -92,13 +96,47 @@ void setup() {
 }
 
 void draw() {
+  
+  calcNextDialogue(null);
+  
   //Print header blocks
   for(Block b : headerBlocks) b.draw();
   
   for(Block b : bodyBlocks.get(currentView)) b.draw();
 }
 
+void calcNextDialogue(String keyPressed) {
+  
+   if(possibleEvents[currentLoc].location.equals("Dorm Room")) {
+     System.out.println("CURRENT LOCATION");
+     //Initial day
+     if(currentDay == 1) {
+       System.out.println("CURRENT DAY");
+       //Continuing the conversation by hitting "C"
+       if(keyPressed != null && keyPressed.equals("C")) {
+         latestDialogue = "C: At the end of each hour you will be offered the chance to attend any event currently happening on your calendar. " + 
+         "\nType the letter next to the event you wish to attend and you will be transported there." + 
+         "\nP: What is my goal here? How do I win the game?" + 
+         "\nC: Today is meant for exploring. I will explain the details later. Maybe . . . tomorrow." + 
+         "\n*C to continue*";
+       }
+       //First dialogue
+       else if(latestDialogue == null) {
+         System.out.println("GOT INTO DIALOGUE UPDATE");
+         latestDialogue = "C: Good morning, Enya. Welcome to your new life." +
+         "\nE: Wh-where am I? What's going on?" + 
+         "\nC: You're in St Andrews. It's Friday of week 4 and you're in your first day here out of many." + 
+         "\nHit your C key to continue this conversation.";
+       }
+     }
+   }
+}
+
 void mouseClicked() {
  currentView += 1;
  if(currentView > 3) currentView = 0;
+}
+
+void keyReleased() {
+  if(key == 'c') calcNextDialogue("C");
 }

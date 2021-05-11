@@ -23,17 +23,13 @@ class Schedule extends Block {
       
       //Loop through possible columns
       for(int i = 0; i < timeSlots.length; i++) {
-        System.out.println("COLUMN: " + i);
         for(int j = event.startTime - startTime; j < event.endTime - startTime; j++) {
-          System.out.println("TIME: " + (j + startTime));
           if(timeSlots[i][j] == 1) {
-           System.out.println("ALREADY FULL");
            foundOne = false;
            break;
           }
         }
         if(foundOne) {
-          System.out.println("FOUND ONE!");
           for(int j = event.startTime - startTime; j < event.endTime - startTime; j++) {
             timeSlots[i][j] = 1;
           }
