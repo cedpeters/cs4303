@@ -8,6 +8,6 @@ class LocationBlock extends Block {
     
     fill(0, 102, 153);
     textAlign(CENTER, CENTER);
-    text(possibleEvents[currentLoc].location, position.x + (width/2), position.y + (height/2));
+    text(currentLoc.location, position.x + (width/2), position.y + (height/2));
   }
 }

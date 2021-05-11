@@ -18,12 +18,15 @@ class Schedule extends Block {
     
     int[][] timeSlots = new int[3][sleepTime - startTime + 1];
     for(Event event : possibleEvents) {
+      System.out.println(event.location);
                   
       boolean foundOne = true;
       
       //Loop through possible columns
       for(int i = 0; i < timeSlots.length; i++) {
+        System.out.println("I: " + i);
         for(int j = event.startTime - startTime; j < event.endTime - startTime; j++) {
+          System.out.println("J: " + j);
           if(timeSlots[i][j] == 1) {
            foundOne = false;
            break;

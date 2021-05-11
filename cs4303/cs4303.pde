@@ -17,8 +17,8 @@ ArrayList<Event> possibleNextEvents;
 
 int currentDay;
 
-Event[] possibleEvents;
-int currentLoc;
+ArrayList<Event> possibleEvents;
+Event currentLoc;
 
 int startTime;
 int sleepTime;
@@ -30,22 +30,23 @@ void setup() {
   
   fullScreen();
   
-  possibleNextEvents = new ArrayList();
-  
-  currentView = 0;
-  keepOldDialogue = true;
-  currentDay = 1;
-  currentLoc = 0;
   startTime = 8;
   sleepTime = 22;
   currentTime = 8;
+  currentView = 0;
+  keepOldDialogue = true;
+  currentDay = 1;
   
-  possibleEvents = new Event[]{
-  new DormEvent(startTime, sleepTime),
-  new Event("Econometrics Lecture", 9, 10, "An interesting choice. Ten minutes of chatting with your friends in exchange for 45 minutes of regretting your second subject of study."),
-  new Event("Disney Pub Quiz", sleepTime-2, sleepTime-1, "Do you know enough to win the pub quiz?"),
-  new Event("Club 601", sleepTime - 4, sleepTime - 1, "You're sticky and you have a headache, but hey - they're playing your favourite song!")
-};
+  possibleNextEvents = new ArrayList();
+  
+  possibleEvents = new ArrayList();
+  possibleEvents.add(new DormEvent(startTime, sleepTime));
+  possibleEvents.add(new Event("Econometrics Lecture", 9, 10, "An interesting choice. Ten minutes of chatting with your friends in exchange for 45 minutes of regretting your second subject of study."));
+  possibleEvents.add(new Event("Disney Pub Quiz", sleepTime-2, sleepTime-1, "Do you know enough to win the pub quiz?"));
+  possibleEvents.add(new Event("Club 601", sleepTime - 4, sleepTime - 1, "You're sticky and you have a headache, but hey - they're playing your favourite song!"));
+    
+  currentLoc = possibleEvents.get(0);
+  
   
   //Make the Blocks in the header
   headerBlocks = new ArrayList();
@@ -114,7 +115,7 @@ void draw() {
 
 void calcNextDialogue(String keyPressed) {
   
-   if(possibleEvents[currentLoc].location.equals("Dorm Room")) {
+   if(currentLoc.location.equals("Dorm Room")) {
      //Initial day
      if(currentDay == 1) {
        //Continuing the conversation by hitting "C"
@@ -162,6 +163,7 @@ void advanceToNextEvent(Event e) {
   currentView = 0;
   currentTime++;
   latestDialogue = null;
+  currentLoc = e;
 }
 
 void mouseClicked() {
@@ -184,5 +186,5 @@ void keyReleased() {
     }
   }
   
-  catch(Exception e)  {System.out.println("ERROR"); }
+  catch(Exception e)  {System.out.println("ERROR");}
 }
