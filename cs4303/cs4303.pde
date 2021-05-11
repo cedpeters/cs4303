@@ -157,6 +157,13 @@ void calcDialogueOptions() {
  }
 }
 
+void advanceToNextEvent(Event e) {
+  possibleNextEvents = new ArrayList();
+  currentView = 0;
+  currentTime++;
+  latestDialogue = null;
+}
+
 void mouseClicked() {
  currentView += 1;
  if(currentView > 3) currentView = 0;
@@ -164,4 +171,18 @@ void mouseClicked() {
 
 void keyReleased() {
   if(key == 'c') calcNextDialogue("C");
+  
+  try {
+    int num = Character.getNumericValue(key);
+    
+    //Make sure that we're in the end of an event, choosing a new one.
+    if(currentView == 3 && possibleNextEvents.size() > 0) {
+      if(num > possibleNextEvents.size()) return;
+      
+      advanceToNextEvent(possibleNextEvents.get(num - 1));
+      return;
+    }
+  }
+  
+  catch(Exception e)  {System.out.println("ERROR"); }
 }
