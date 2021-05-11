@@ -11,6 +11,9 @@ float portionHeader = 0.1;
 //Game status
 String[] possibleViews = {"LocStart", "InConvo", "DoingPuzzle", "EventEnd"};
 int currentView;
+boolean keepOldDialogue;
+
+ArrayList<Event> possibleNextEvents;
 
 int currentDay;
 
@@ -27,7 +30,10 @@ void setup() {
   
   fullScreen();
   
+  possibleNextEvents = new ArrayList();
+  
   currentView = 0;
+  keepOldDialogue = true;
   currentDay = 1;
   currentLoc = 0;
   startTime = 8;
@@ -98,6 +104,7 @@ void setup() {
 void draw() {
   
   calcNextDialogue(null);
+  calcDialogueOptions();
   
   //Print header blocks
   for(Block b : headerBlocks) b.draw();
@@ -108,21 +115,19 @@ void draw() {
 void calcNextDialogue(String keyPressed) {
   
    if(possibleEvents[currentLoc].location.equals("Dorm Room")) {
-     System.out.println("CURRENT LOCATION");
      //Initial day
      if(currentDay == 1) {
-       System.out.println("CURRENT DAY");
        //Continuing the conversation by hitting "C"
        if(keyPressed != null && keyPressed.equals("C")) {
          latestDialogue = "C: At the end of each hour you will be offered the chance to attend any event currently happening on your calendar. " + 
          "\nType the letter next to the event you wish to attend and you will be transported there." + 
          "\nP: What is my goal here? How do I win the game?" + 
-         "\nC: Today is meant for exploring. I will explain the details later. Maybe . . . tomorrow." + 
-         "\n*C to continue*";
+         "\nC: Today is meant for exploring. I will explain the details later. Maybe . . . tomorrow.";
+         currentView = 3;
+         keepOldDialogue = true;
        }
        //First dialogue
        else if(latestDialogue == null) {
-         System.out.println("GOT INTO DIALOGUE UPDATE");
          latestDialogue = "C: Good morning, Enya. Welcome to your new life." +
          "\nE: Wh-where am I? What's going on?" + 
          "\nC: You're in St Andrews. It's Friday of week 4 and you're in your first day here out of many." + 
@@ -130,6 +135,26 @@ void calcNextDialogue(String keyPressed) {
        }
      }
    }
+}
+
+void calcDialogueOptions() {
+  
+  //TODO: DEAL WITH END OF DAY
+  
+  //If the event has ended and new event options are being displayed
+ if(currentView == 3) {
+   if(keepOldDialogue == false) latestDialogue = "";
+   if(possibleNextEvents.size() != 0) return;
+   latestDialogue += "\n\nChoose where you would like to be for the next hour: ";
+   for(Event e : possibleEvents) {
+     if(e.startTime <= currentTime + 1 && e.endTime >= currentTime + 2) {
+       possibleNextEvents.add(e); //todo: clear when move to a new location
+       latestDialogue += "\n" + possibleNextEvents.size() + ": " + e.location;
+     }
+   }
+   
+   
+ }
 }
 
 void mouseClicked() {
