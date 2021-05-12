@@ -18,26 +18,23 @@ class Schedule extends Block {
     
     int[][] timeSlots = new int[3][sleepTime - startTime + 1];
     for(Event event : possibleEvents) {
-      System.out.println(event.location);
                   
       boolean foundOne = true;
       
       //Loop through possible columns
       for(int i = 0; i < timeSlots.length; i++) {
-        System.out.println("I: " + i);
-        for(int j = event.startTime - startTime; j < event.endTime - startTime; j++) {
-          System.out.println("J: " + j);
+        for(int j = event.beginTime - startTime; j < event.endTime - startTime; j++) {
           if(timeSlots[i][j] == 1) {
            foundOne = false;
            break;
           }
         }
         if(foundOne) {
-          for(int j = event.startTime - startTime; j < event.endTime - startTime; j++) {
+          for(int j = event.beginTime - startTime; j < event.endTime - startTime; j++) {
             timeSlots[i][j] = 1;
           }
           
-          entries.add(new InfoFlag(position.x + (width * (i + 1)/4), position.y + ((event.startTime - startTime) * height/(sleepTime-startTime)), width/4, (event.endTime - event.startTime) * height/(sleepTime-startTime), event.location));
+          entries.add(new InfoFlag(position.x + (width * (i + 1)/4), position.y + ((event.beginTime - startTime) * height/(sleepTime-startTime)), width/4, (event.endTime - event.beginTime) * height/(sleepTime-startTime), event.location));
 
           break;
         }

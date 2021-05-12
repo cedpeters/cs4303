@@ -36,7 +36,7 @@ void setup() {
   currentTime = 8;
   currentView = 0;
   keepOldDialogue = true;
-  currentDay = 1;
+  currentDay = 2;
   
   possibleNextEvents = new ArrayList();
   
@@ -97,7 +97,6 @@ void setup() {
 void draw() {
   
   calcNextDialogue(null);
-  calcDialogueOptions();
   
   header.draw();
     
@@ -106,89 +105,38 @@ void draw() {
 
 void calcNextDialogue(String keyPressed) {
   
-   if(currentLoc.location.equals("Dorm Room")) {
-     //Initial day
-     if(currentDay == 1) {
-       //Continuing the conversation by hitting "C"
-       if(keyPressed != null && keyPressed.equals("C")) {
-         latestDialogue = "C: At the end of each hour you will be offered the chance to attend any event currently happening on your calendar. " + 
-         "\nType the letter next to the event you wish to attend and you will be transported there." + 
-         "\nP: What is my goal here? How do I win the game?" + 
-         "\nC: Today is meant for exploring. I will explain the details later. Maybe . . . tomorrow.";
-         currentView = 3;
-         keepOldDialogue = true;
-       }
-       //First dialogue
-       else if(latestDialogue == null) {
-         latestDialogue = "C: Good morning, Enya. Welcome to your new life." +
-         "\nE: Wh-where am I? What's going on?" + 
-         "\nC: You're in St Andrews. It's Friday of week 4 and you're in your first day here out of many." + 
-         "\nType \'C\' to continue this conversation.";
-       }
-     }
-     
-     else if(currentDay == 2) {
+  if(currentView == 2) {
+   //todo: deal with puzzle view
+  }
+  
+  //End of an event: choose next location
+  else if(currentView == 3) {
+    
+    //It's time to move on but the player hasn't entered a command yet
+    if(keyPressed == null) {
+       if(possibleNextEvents.size() != 0) return; //If this has already been done, don't recreate the wheel
+       if(keepOldDialogue == false) latestDialogue = "";
        
-       if(latestDialogue == null) {
-         latestDialogue = "C: Good morning and welcome to your second day in the game. Did you have a good time yesterday?";
-         
-         latestDialogue += 
-          "\n1: No, that was horrible." + 
-         "\n2: Yes, I guess."; 
-         
-         currentView = 1;
+       latestDialogue += "\n\nChoose where you would like to be in the next hour: ";
        
-       }
-       
-       if(keyPressed == null) {
-        dialogueResponseOptions = new String[]{
-           "\nThat\'s too bad. I'm afraid you'll need to learn how to appreciate the fine points of a mundane day, if you\'re going to get out of here. Until tomorrow!",
-           "\nThat\'s good. Try to hold onto that "
-         }; 
-       }
-       
-       else {
-         
-         int numPressed = Integer.parseInt(keyPressed);
-                           
-         if(dialogueResponseOptions != null && numPressed > 0 && numPressed <= dialogueResponseOptions.length) {
-           latestDialogue += dialogueResponseOptions[numPressed - 1];
-           latestDialogue += "\nPress C to continue with your game.";
-           currentView = 3;
-           dialogueResponseOptions = null;
+       for(Event e : possibleEvents) {
+         if(e.beginTime <= currentTime + 1 && e.endTime >= currentTime + 2) {
+           possibleNextEvents.add(e); //todo: clear when move to a new location
+           latestDialogue += "\n" + possibleNextEvents.size() + ": " + e.location;
          }
-         else return;
        }
-       
-       //todo: dorm room day 2, regular dialogue after the first hour.
      }
      
-     /**
-     TO ADD:
-       1. The dialogue for a normal day (can either take a nap, thereby skipping the hour, or can work on the puzzle) - but why would they do that?? Maybe to skip an interaction they don't ned?
-       2. The functionality to flip into puzzle mode
-       3. "Day 2" conversation (super basic "welcome to day 2!"
-       4. "Day 3" conversation (conversation where player is confused, computer explains the rules)
-     */
-   }
-}
-
-void calcDialogueOptions() {
-  
-  //TODO: DEAL WITH END OF DAY
-  
-  //If the event has ended and new event options are being displayed
- if(currentView == 3) {
-   if(keepOldDialogue == false) latestDialogue = "";
-   if(possibleNextEvents.size() != 0) return;
-   latestDialogue += "\n\nChoose where you would like to be in the next hour: ";
-   for(Event e : possibleEvents) {
-     if(e.startTime <= currentTime + 1 && e.endTime >= currentTime + 2) {
-       possibleNextEvents.add(e); //todo: clear when move to a new location
-       latestDialogue += "\n" + possibleNextEvents.size() + ": " + e.location;
+     else {
+       int num = Integer.parseInt(keyPressed);
+       
+       if(num > possibleNextEvents.size()) return;
+      
+      advanceToNextEvent(possibleNextEvents.get(num - 1));
      }
-   }
- }
+  }
+  
+  else currentLoc.calcNextDialogue(keyPressed);
 }
 
 void advanceToNextEvent(Event e) {
@@ -211,18 +159,7 @@ void keyReleased() {
   try {
     int num = Character.getNumericValue(key);
     
-    if(currentView == 1) {
-     calcNextDialogue(String.valueOf(key));
-     return;
-    }
-    
-    //Make sure that we're in the end of an event, choosing a new one.
-    if(currentView == 3 && possibleNextEvents.size() > 0) {
-      if(num > possibleNextEvents.size()) return;
-      
-      advanceToNextEvent(possibleNextEvents.get(num - 1));
-      return;
-    }
+    calcNextDialogue(String.valueOf(key));
  
   }
   
