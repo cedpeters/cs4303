@@ -16,4 +16,11 @@ class Block {
     fill(color(255, 0, 255));
     rect(position.x, position.y, width, height);
   }
+  
+  void draw(String text) {
+    draw();
+    fill(0, 102, 153);
+    textAlign(CENTER, CENTER);
+    text(text, position.x + (width/2), position.y + (height/2));
+  }
 }

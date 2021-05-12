@@ -1,9 +1,8 @@
 
 
 //Blocks on the screen
-ArrayList<Block> headerBlocks;
 ArrayList<ArrayList<Block>> bodyBlocks;
-Block header;
+Header header;
 Block body;
 float portionHeader = 0.1;
 
@@ -37,12 +36,13 @@ void setup() {
   currentTime = 8;
   currentView = 0;
   keepOldDialogue = true;
-  currentDay = 2;
+  currentDay = 1;
   
   possibleNextEvents = new ArrayList();
   
   possibleEvents = new ArrayList();
-  possibleEvents.add(new DormEvent(startTime, sleepTime));
+  //possibleEvents.add(new Event());
+  possibleEvents.add(new DormEvent());
   possibleEvents.add(new Event("Econometrics Lecture", 9, 10, "An interesting choice. Ten minutes of chatting with your friends in exchange for 45 minutes of regretting your second subject of study."));
   possibleEvents.add(new Event("Disney Pub Quiz", sleepTime-2, sleepTime-1, "Do you know enough to win the pub quiz?"));
   possibleEvents.add(new Event("Club 601", sleepTime - 4, sleepTime - 1, "You're sticky and you have a headache, but hey - they're playing your favourite song!"));
@@ -51,18 +51,8 @@ void setup() {
   
   
   //Make the Blocks in the header
-  headerBlocks = new ArrayList();
   
-  this.header = new Block(0, 0, displayWidth, displayHeight*portionHeader);
-  
-  Block clock = new Clock(header.position.x, header.position.y, header.width * 0.33, header.height);
-  Block day = new Day(clock.position.x + clock.width, header.position.y, header.width * 0.33, header.height);
-  Block location = new LocationBlock(day.position.x + day.width, header.position.y, header.width - (clock.width + day.width), header.height);
-  
-  //blocks.add(header);
-  headerBlocks.add(clock);
-  headerBlocks.add(day);
-  headerBlocks.add(location);
+  this.header = new Header(0, 0, displayWidth, displayHeight*portionHeader);
   
   //Make all the Blocks in the body
   bodyBlocks = new ArrayList();
@@ -109,9 +99,8 @@ void draw() {
   calcNextDialogue(null);
   calcDialogueOptions();
   
-  //Print header blocks
-  for(Block b : headerBlocks) b.draw();
-  
+  header.draw();
+    
   for(Block b : bodyBlocks.get(currentView)) b.draw();
 }
 

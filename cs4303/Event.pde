@@ -8,4 +8,6 @@ class Event {
     this.startTime = startTime;
     this.endTime = endTime;
   }
+  
+  public Event() {}
 }
