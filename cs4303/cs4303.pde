@@ -1,5 +1,3 @@
-
-
 //Blocks on the screen
 ArrayList<Block> bodyBlocks;
 Header header;
@@ -42,10 +40,15 @@ void setup() {
   
   possibleEvents = new ArrayList();
   possibleEvents.add(new EventDorm());
-  possibleEvents.add(new Event("Econometrics Lecture", 9, 10, "An interesting choice. Ten minutes of chatting with your friends in exchange for 45 minutes of regretting your second subject of study."));
-  possibleEvents.add(new Event("Disney Pub Quiz", sleepTime-2, sleepTime-1, "Do you know enough to win the pub quiz?"));
-  possibleEvents.add(new Event("Club 601", sleepTime - 4, sleepTime - 1, "You're sticky and you have a headache, but hey - they're playing your favourite song!"));
+  possibleEvents.add(new EventBreakfast());
+  possibleEvents.add(new EventLunch());
+  possibleEvents.add(new EventDinner());
+  possibleEvents.add(new EventEconometrics());
+  possibleEvents.add(new EventEconHistory());
+  //possibleEvents.add(new Event("Disney Pub Quiz", sleepTime-2, sleepTime-1, "Do you know enough to win the pub quiz?"));
+  //possibleEvents.add(new Event("Club 601", sleepTime - 4, sleepTime - 1, "You're sticky and you have a headache, but hey - they're playing your favourite song!"));
     
+  //TODO: add requirements to unlock some events on calendar.
   currentLoc = possibleEvents.get(0);
   
   

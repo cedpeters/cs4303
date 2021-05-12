@@ -18,6 +18,8 @@ class Schedule extends Block {
     
     int[][] timeSlots = new int[3][sleepTime - startTime + 1];
     for(Event event : possibleEvents) {
+      
+      if(event.location.equals("Dorm Room")) { continue(); }
                   
       boolean foundOne = true;
       
