@@ -21,6 +21,6 @@ class Block {
     draw();
     fill(0, 102, 153);
     textAlign(CENTER, CENTER);
-    text(text, position.x + (width/2), position.y + (height/2));
+    text(text, position.x, position.y, width, height);
   }
 }

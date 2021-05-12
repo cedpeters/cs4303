@@ -1,6 +1,6 @@
-class DormEvent extends Event{
+class EventDorm extends Event{
 
-  public DormEvent() {
+  public EventDorm() {
     
     super(
       "Dorm Room", 
@@ -17,14 +17,9 @@ class DormEvent extends Event{
      
      //Todo: add the dialogue for after solving the final puzzle (i.e. winning!)
      
-     //todo: else regularDay(keyPressed);
-     /**
-     TO ADD:
-       1. The dialogue for a normal day (can either take a nap, thereby skipping the hour, or can work on the puzzle) - but why would they do that?? Maybe to skip an interaction they don't ned?
-       2. The functionality to flip into puzzle mode
-       3. "Day 2" conversation (super basic "welcome to day 2!"
-       4. "Day 3" conversation (conversation where player is confused, computer explains the rules)
-     */
+     //todo: else regularDay(keyPressed); - can take a nap or work on puzzle
+     
+     //todo: currentDay == 3 (explain the rules of the game)
   }
   
   private void firstDay(String keyPressed) {
@@ -101,8 +96,6 @@ class DormEvent extends Event{
        
        else return;
      }
-       
-     //todo: dorm room day 2, regular dialogue after the first hour.
   }
   
 }

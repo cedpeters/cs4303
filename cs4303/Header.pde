@@ -1,7 +1,5 @@
 class Header extends Block{
-  
-  PVector position;
-  
+    
   Block clock;
   Block day;
   Block location;
