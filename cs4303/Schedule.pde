@@ -14,6 +14,7 @@ class Schedule extends Block {
      text((n + startTime < 10 ? "0" : "") + (n + startTime) + ":00", position.x + 20, position.y + 10 + (height * n / (sleepTime - startTime + 1))); 
     }
     
+    //If the schedule has already been created, just print it and be done.
     if(scheduleEntries != null) {
       for(Block f : scheduleEntries) {
         f.draw();
@@ -21,28 +22,40 @@ class Schedule extends Block {
       return;
     }
     
+    //Make an empty list of the possibilities for each hour.
+    possibleEventsEachHour = new HashMap();
+    for(int i = startTime; i < sleepTime; i++) {
+     possibleEventsEachHour.put(i, new ArrayList()); 
+    }
+    
+    
     int[][] timeSlots = new int[3][sleepTime - startTime + 1];
     scheduleEntries = new ArrayList();
-    for(Event event : possibleEvents) {
+    
+    for(HashMap.Entry<String, int[]> event : events.eventNameToTimes.entrySet()) {
+      String key = event.getKey();
+      int[] value = event.getValue();
       
-      if(event.location.equals("Dorm Room") || !event.unlocked) { continue; }
-                  
+      possibleEventsEachHour.get(value[0]).add(key);
+      
+      if(key.equals("Dorm Room") || value[2] == 0) continue;
+      
       boolean foundOne = true;
       
       //Loop through possible columns
       for(int i = 0; i < timeSlots.length; i++) {
-        for(int j = event.beginTime - startTime; j < event.endTime - startTime; j++) {
+        for(int j = value[0] - startTime; j < value[1] - startTime; j++) {
           if(timeSlots[i][j] == 1) {
            foundOne = false;
            break;
           }
         }
         if(foundOne) {
-          for(int j = event.beginTime - startTime; j < event.endTime - startTime; j++) {
+          for(int j = value[0] - startTime; j < value[1] - startTime; j++) {
             timeSlots[i][j] = 1;
           }
           
-          scheduleEntries.add(new Block(position.x + (width * (i + 1)/4), position.y + ((event.beginTime - startTime) * height/(sleepTime-startTime)), width/4, (event.endTime - event.beginTime) * height/(sleepTime-startTime), event.location));
+          scheduleEntries.add(new Block(position.x + (width * (i + 1)/4), position.y + ((value[0] - startTime) * height/(sleepTime-startTime)), width/4, (value[1] - value[0]) * height/(sleepTime-startTime), key));
 
           break;
         }
@@ -52,6 +65,7 @@ class Schedule extends Block {
       foundOne = true;
     }
     
+
     for(Block f : scheduleEntries) f.draw();
   }
 }

@@ -6,59 +6,53 @@ float portionHeader = 0.1;
 
 
 //Game status
-String[] possibleViews = {"LocStart", "InConvo", "DoingPuzzle", "EventEnd"};
-int currentView;
-boolean keepOldDialogue;
+String[] possibleViews = {"LocStart", "InConvo", "DoingPuzzle", "EventEnd"}; //<>//
 
 String[] dialogueResponseOptions;
 
-ArrayList<Event> possibleNextEvents;
+ArrayList<String> possibleNextEvents;
 
 ArrayList<Block> scheduleEntries; //TODO: reset to null when changing day
 
-int currentDay;
+HashMap<Integer, ArrayList<String>> possibleEventsEachHour;
 
-ArrayList<Event> possibleEvents;
-Event currentLoc;
+String currentLoc;
 
 int startTime;
 int sleepTime;
 int currentTime;
+int currentView;
+boolean keepOldDialogue;
+int currentDay;
+
+Event events;
 
 String latestDialogue;
 
 void setup() {
   
+  System.out.println("SETUP");
+  
   fullScreen();
+  
+  System.out.println("FULLSCREEN");
   
   startTime = 8;
   sleepTime = 22;
   currentTime = 8;
-  currentView = 0;
+  System.out.println("TIME: ");
+  currentView = 0; //<>//
   keepOldDialogue = true;
-  currentDay = 2;
+  currentDay = 1;
+    
+  System.out.println("BEFORE EVENTS");
   
-  possibleNextEvents = new ArrayList();
+  events = new Event();
   
-  possibleEvents = new ArrayList();
-  possibleEvents.add(new EventDorm()); //<>//
-  possibleEvents.add(new EventLunch());
-  possibleEvents.add(new EventDinner());
-  possibleEvents.add(new EventEconometrics());
-  possibleEvents.add(new EventEconHistory());
-  possibleEvents.add(new EventBehaviouralEcon());
-  possibleEvents.add(new EventHistoryTut());
-  possibleEvents.add(new EventDiplomat());
-  possibleEvents.add(new EventCareerWork());
-  possibleEvents.add(new EventJPMorgan());
-  possibleEvents.add(new EventCareerFayre());
-  possibleEvents.add(new EventHouseParty());
-  possibleEvents.add(new EventBreakfast());
-  possibleEvents.add(new EventDorm());
-  
+  System.out.println("EVENTS");
     
   //TODO: add requirements to unlock some events on calendar.
-  currentLoc = possibleEvents.get(0);
+  currentLoc = events.getFirstLocOfDay();
   
   
   //Make the Blocks in the header
@@ -85,6 +79,8 @@ void setup() {
 }
 
 void draw() {
+  
+  System.out.println("DRAW");
     
   calcNextDialogue(null);
   
@@ -105,35 +101,36 @@ void calcNextDialogue(String keyPressed) {
     
     //It's time to move on but the player hasn't entered a command yet
     if(keyPressed == null) {
-       if(possibleNextEvents.size() != 0) return; //If this has already been done, don't recreate the wheel
+       if(possibleNextEvents != null) return; //If this has already been done, don't recreate the wheel
+       
+       possibleNextEvents = new ArrayList();
        
        if(keepOldDialogue == false) latestDialogue = "";
        
-       latestDialogue += "\n\nChoose where you would like to be in the next hour: ";
+       int newStartTime = events.endTimeOf(currentLoc);
        
-       for(Event e : possibleEvents) {
-         if(!e.unlocked) continue;
-         if(e.beginTime <= currentTime + 1 && e.endTime >= currentTime + 2) {
-           possibleNextEvents.add(e);
-           latestDialogue += "\n" + possibleNextEvents.size() + ": " + e.location;
-         }
+       latestDialogue += "\n\nChoose where you would like to be start at time " + newStartTime + ":"; 
+       
+       for(String e : possibleEventsEachHour.get(newStartTime)) {
+         possibleNextEvents.add(e);
+         latestDialogue += "\n" + possibleNextEvents.size() + ": " + e;
        }
      }
-     
+    
      else {
        int num = Integer.parseInt(keyPressed);
        
        if(num > possibleNextEvents.size()) return;
       
-      advanceToNextEvent(possibleNextEvents.get(num - 1));
+        advanceToNextEvent(possibleNextEvents.get(num - 1));
      }
   }
   
-  else currentLoc.calcNextDialogue(keyPressed);
+  else events.calcNextDialogue(keyPressed);
 }
 
-void advanceToNextEvent(Event e) {
-  possibleNextEvents = new ArrayList();
+void advanceToNextEvent(String e) {
+  possibleNextEvents = null;
   currentView = 0;
   currentTime++;
   latestDialogue = null;
@@ -145,6 +142,7 @@ void keyReleased() {
   
   try {
     int num = Character.getNumericValue(key);
+    System.out.println("NUM: " + num);
     
     calcNextDialogue(String.valueOf(key));
  

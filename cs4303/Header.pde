@@ -16,6 +16,6 @@ class Header extends Block{
  public void draw() {
    clock.draw((currentTime < 10 ? "0" : "") + currentTime + ":00");
    day.draw("Day " + currentDay);
-   location.draw(currentLoc.location);
+   location.draw(currentLoc);
  }
 }

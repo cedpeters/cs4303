@@ -2,7 +2,6 @@ class DoingPuzzle extends Block{
     
   Block puzzleStats;
   Block puzzle;
-  Block notes;
   
   public DoingPuzzle(float x, float y, float width, float height) {
     super(x, y, width, height);

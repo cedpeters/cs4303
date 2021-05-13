@@ -22,7 +22,7 @@ class LocStart extends Block{
    textAlign(CENTER, CENTER);
    
    
-   description.draw(currentLoc.description);
+   description.draw(events.getDescription(currentLoc));
    
    try {
      dialogueMenu.draw(latestDialogue);

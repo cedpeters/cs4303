@@ -1,9 +1,22 @@
+
 class Event {
   String location;
   String description;
   int beginTime;
   int endTime;
   boolean unlocked;
+  
+  HashMap<String, int[]> eventNameToTimes = new HashMap();
+  HashMap<String, String> eventNameToDescription = new HashMap();
+  
+  public Event() {
+    eventNameToTimes.put("Behavioural Econ (Irvine Building)", new int[]{16,18, 1});
+    eventNameToDescription.put("Behavioural Econ (Irvine Building)", "The room is crowded full of students taking notes on all the ways people do not, in fact, behave rationally at all times.");
+    
+    
+    eventNameToTimes.put("Dorm Room", new int[]{startTime, sleepTime-1, 1});
+    eventNameToDescription.put("Dorm Room", "Welcome to your dorm room! This is your safe, quiet space. No one will bother you here (besides me, of course - no getting away from the narrator!), but you'll never get out by staying here all day every day, either.");
+  }
   
   public Event(String location, int startTime, int endTime, String description) {
     System.out.println("MAKING EVENT: " + location);
@@ -19,31 +32,26 @@ class Event {
     this.unlocked = unlocked;
   }
   
-  public Event() {}
-  
-  public void calcNextDialogue(String keyPressed) {}
-}
-
-
-class EventBehaviouralEcon extends Event{
-
-  public EventBehaviouralEcon() {
-    
-    super(
-      "Behavioural Econ (Irvine Building)", 
-      16, 
-      18, 
-      "The room is crowded full of students taking notes on all the ways people do not, in fact, behave rationally at all times.",
-      true
-    );
-  }
-  
   public void calcNextDialogue(String keyPressed) {
-     currentView = 3; //Ready to move to next hour
+    System.out.println("KEY PRESSED: " + keyPressed);
+    currentView = 3; //Default is to move to next hour
   }
   
+  public String getFirstLocOfDay() {
+   return "Dorm Room"; 
+  }
+  
+  public String getDescription(String e) {
+   return eventNameToDescription.get(e); 
+  }
+  
+  public int endTimeOf(String e) {
+    if(e.equals("Dorm Room")) return currentTime + 1;
+    return eventNameToTimes.get(e)[1]; 
+  }
 }
 
+/*
 class EventEconometrics extends Event{
 
   public EventEconometrics() {
@@ -242,3 +250,4 @@ class EventBreakfast extends Event{
   }
   
 }
+*/
