@@ -6,7 +6,7 @@ class Schedule extends Block {
   void draw() {
     super.draw();
     
-    ArrayList<Block> entries = new ArrayList();
+    scheduleEntries = new ArrayList();
         
     fill(0, 102, 153);
     textAlign(CENTER, CENTER);
@@ -16,10 +16,15 @@ class Schedule extends Block {
      text((n + startTime < 10 ? "0" : "") + (n + startTime) + ":00", position.x + 20, position.y + 10 + (height * n / (sleepTime - startTime + 1))); 
     }
     
+    if(scheduleEntries != null) {
+      for(Block f : scheduleEntries) f.draw();
+      return;
+    }
+    
     int[][] timeSlots = new int[3][sleepTime - startTime + 1];
     for(Event event : possibleEvents) {
       
-      if(event.location.equals("Dorm Room")) { continue; }
+      if(event.location.equals("Dorm Room") || !event.unlocked) { continue; }
                   
       boolean foundOne = true;
       
@@ -36,7 +41,7 @@ class Schedule extends Block {
             timeSlots[i][j] = 1;
           }
           
-          entries.add(new Block(position.x + (width * (i + 1)/4), position.y + ((event.beginTime - startTime) * height/(sleepTime-startTime)), width/4, (event.endTime - event.beginTime) * height/(sleepTime-startTime), event.location));
+          scheduleEntries.add(new Block(position.x + (width * (i + 1)/4), position.y + ((event.beginTime - startTime) * height/(sleepTime-startTime)), width/4, (event.endTime - event.beginTime) * height/(sleepTime-startTime), event.location));
 
           break;
         }
@@ -46,6 +51,6 @@ class Schedule extends Block {
       foundOne = true;
     }
     
-    for(Block f : entries) f.draw();
+    for(Block f : scheduleEntries) f.draw();
   }
 }

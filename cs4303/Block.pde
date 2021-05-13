@@ -16,7 +16,6 @@ class Block {
   
   public Block(float x, float y, float width, float height, String text) {
     this(x, y, width, height);
-    System.out.println("TEXT: " + text);
     this.text = text;
   }
   

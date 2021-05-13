@@ -6,7 +6,8 @@ class EventDorm extends Event{
       "Dorm Room", 
       startTime, 
       sleepTime - 1, 
-      "Welcome to your dorm room! This is your safe, quiet space. No one will bother you here (besides me, of course - no getting away from the narrator!), but you'll never get out by staying here all day every day, either."
+      "Welcome to your dorm room! This is your safe, quiet space. No one will bother you here (besides me, of course - no getting away from the narrator!), but you'll never get out by staying here all day every day, either.",
+      true
     );
   }
   
@@ -59,9 +60,7 @@ class EventDorm extends Event{
   }
   
   private void secondDay(String keyPressed) {
-    
-    System.out.println("KEY ON SECOND DAY: " + keyPressed); 
-    
+        
     //Deal with any hour after the first one (the rest of this method is the first hour of the second day)
     if(currentTime != startTime) {
       latestDialogue = "C: Welcome back to your dorm room. I\'m afraid there\'s not much to do here, today.";

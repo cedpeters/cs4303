@@ -14,6 +14,8 @@ String[] dialogueResponseOptions;
 
 ArrayList<Event> possibleNextEvents;
 
+ArrayList<Block> scheduleEntries; //TODO: reset to null when changing day
+
 int currentDay;
 
 ArrayList<Event> possibleEvents;
@@ -39,8 +41,7 @@ void setup() {
   possibleNextEvents = new ArrayList();
   
   possibleEvents = new ArrayList();
-  possibleEvents.add(new EventDorm());
-  possibleEvents.add(new EventBreakfast());
+  possibleEvents.add(new EventDorm()); //<>//
   possibleEvents.add(new EventLunch());
   possibleEvents.add(new EventDinner());
   possibleEvents.add(new EventEconometrics());
@@ -52,6 +53,8 @@ void setup() {
   possibleEvents.add(new EventJPMorgan());
   possibleEvents.add(new EventCareerFayre());
   possibleEvents.add(new EventHouseParty());
+  possibleEvents.add(new EventBreakfast());
+  possibleEvents.add(new EventDorm());
     
   //TODO: add requirements to unlock some events on calendar.
   currentLoc = possibleEvents.get(0);
@@ -82,6 +85,8 @@ void setup() {
 
 void draw() {
   
+  System.out.println("DRAW");
+  
   calcNextDialogue(null);
   
   header.draw();
@@ -108,6 +113,7 @@ void calcNextDialogue(String keyPressed) {
        latestDialogue += "\n\nChoose where you would like to be in the next hour: ";
        
        for(Event e : possibleEvents) {
+         if(!e.unlocked) continue;
          if(e.beginTime <= currentTime + 1 && e.endTime >= currentTime + 2) {
            possibleNextEvents.add(e);
            latestDialogue += "\n" + possibleNextEvents.size() + ": " + e.location;
