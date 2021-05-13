@@ -26,6 +26,7 @@ class Schedule extends Block {
     possibleEventsEachHour = new HashMap();
     for(int i = startTime; i < sleepTime; i++) {
      possibleEventsEachHour.put(i, new ArrayList()); 
+     possibleEventsEachHour.get(i).add("Dorm Room");
     }
     
     

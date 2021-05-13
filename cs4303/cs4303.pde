@@ -137,6 +137,13 @@ void advanceToNextEvent(String e) {
   currentLoc = e;
 }
 
+void changeView(int view) {
+ if(view == 3) {
+  this.currentView = 3;
+  //this.currentTime = events.endTimeOf(currentLoc);
+ }
+}
+
 void keyReleased() {
   if(key == 'c') calcNextDialogue("C");
   
