@@ -9,7 +9,7 @@ class Event {
     eventNameToDescription.put("Behavioural Econ (Irvine Building)", "The room is crowded full of students taking notes on all the ways people do not, in fact, behave rationally at all times.");
     
     eventNameToTimes.put("Dorm Room", new int[]{startTime, sleepTime-1, 1});
-    eventNameToDescription.put("Dorm Room", "Welcome to your dorm room! This is your safe, quiet space. No one will bother you here (besides me, of course - no getting away from the narrator!), but you'll never get out by staying here all day every day, either.");
+    eventNameToDescription.put("Dorm Room", "Welcome to your dorm room! This is your safe, quiet space. No one will bother you here (besides me, of course - no getting away from the narrator!), but you'll never get out of the game by staying here all day every day, either.");
     
     eventNameToTimes.put("Econometrics Lecture (Upper College Lawn)", new int[]{9, 11, 1});
     eventNameToDescription.put("Econometrics Lecture (Upper College Lawn)", "An interesting choice. Ten minutes of chatting with your friends in exchange for 45 minutes of wondering why anyone would voluntarily subject themselves to statistics courses.");
@@ -36,6 +36,9 @@ class Event {
       case "Dorm Room":
         calcNextDialogueDormRoom(keyPressed);
         break;
+      case "Dinner (Uni Hall)":
+        calcNextDialogueDinner(keyPressed);
+        break;
       default: 
         changeView(3); //move to the next hour
     }
@@ -54,10 +57,18 @@ class Event {
     return eventNameToTimes.get(e)[1]; 
   }
   
+  //*************************Dinner********************************
+  private void calcNextDialogueDinner(String keyPressed) {
+    
+  }
+  
+  //*************************Dorm Room*****************************
   private void calcNextDialogueDormRoom(String keyPressed) {
      if(currentDay == 1) firstDayDorm(keyPressed);
      
-     else if(currentDay == 2) secondDayDorm(keyPressed); 
+     else if(currentDay == 2 && currentTime == startTime) secondDayMorning(keyPressed); 
+     
+     else regularDayDorm(keyPressed);
      
      //Todo: add the dialogue for after solving the final puzzle (i.e. winning!)
      
@@ -95,22 +106,15 @@ class Event {
         latestDialogue = "C: At the end of each hour you will be offered the chance to attend any event currently happening on your calendar. " + 
        "\nType the letter next to the event you wish to attend and you will be transported there." + 
        "\nP: What is my goal here? How do I win the game?" + 
-       "\nC: Today is meant for exploring. I will explain the details later. Maybe . . . tomorrow.";
+       "\nC: Today is meant for exploring. I will explain the details tomorrow morning.";
        currentView = 3;
        keepOldDialogue = true;
       }
     }
   }
   
-  private void secondDayDorm(String keyPressed) {
+  private void secondDayMorning(String keyPressed) {
         
-    //Deal with any hour after the first one (the rest of this method is the first hour of the second day)
-    if(currentTime != startTime) {
-      latestDialogue = "C: Welcome back to your dorm room. I\'m afraid there\'s not much to do here, today.";
-      currentView = 3;
-      return;
-    }
-    
     //Start of the location
     if(latestDialogue == null) {
          latestDialogue = "C: Good morning and welcome to your second day in the game. Did you have a good time yesterday?"
@@ -118,11 +122,16 @@ class Event {
          "\n2: Yes, I guess."; 
          
          dialogueResponseOptions = new String[]{
-         "\nThat\'s too bad. I'm afraid you'll need to learn how to appreciate the fine points of a mundane day" + 
-         "\nin order to get out of here. Until tomorrow!",
-         "\nThat\'s good. Try to hold onto that "
-       };
-     }
+           "\nThat\'s too bad. I'm afraid you'll need to learn how to appreciate the fine points of a mundane day" + 
+           "\nin order to get out of here.",
+           "\nThat\'s good. Try to hold onto that."
+         };
+         
+         String explanation = "In order to get out of the game, you need to solve three puzzles. Convince three people to lend you a prized possession, then bring those items here to solve the puzzle attached to each one. You will lose your puzzle pieces at the end of each day.";
+         
+         dialogueResponseOptions[0] += explanation;
+         dialogueResponseOptions[1] += explanation;
+   }
      
      //Don't do anything until the key is pressed.
      
@@ -132,12 +141,23 @@ class Event {
                            
        if(dialogueResponseOptions != null && numPressed > 0 && numPressed <= dialogueResponseOptions.length) {
          latestDialogue += dialogueResponseOptions[numPressed - 1];
-         currentView = 3;
+         changeView(3);
          dialogueResponseOptions = null;
        }
        
        else return;
      }
+  }
+  
+  private void regularDayDorm(String keyPressed) {
+    if(gatheredPuzzles.size() == 0) {
+      latestDialogue = "C: Welcome back to your dorm room. I\'m afraid there\'s not much to do here right now. Go find some prized items.";
+      changeView(3);
+    }
+    
+    else {
+      //todo: if all puzzles are solved, just give a stats update. Otherwise, give stats update and provide option to solve a puzzle or move to next event.
+    }
   }
   
   

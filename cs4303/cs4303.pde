@@ -16,6 +16,8 @@ ArrayList<Block> scheduleEntries; //TODO: reset to null when changing day
 
 HashMap<Integer, ArrayList<String>> possibleEventsEachHour;
 
+ArrayList<Puzzle> gatheredPuzzles;
+
 String currentLoc;
 
 int startTime;
@@ -31,25 +33,19 @@ String latestDialogue;
 
 void setup() {
   
-  System.out.println("SETUP");
   
   fullScreen();
-  
-  System.out.println("FULLSCREEN");
   
   startTime = 8;
   sleepTime = 22;
   currentTime = 8;
-  System.out.println("TIME: ");
   currentView = 0; //<>//
   keepOldDialogue = true;
-  currentDay = 1;
-    
-  System.out.println("BEFORE EVENTS");
-  
+  currentDay = 2;
+  gatheredPuzzles = new ArrayList();  //todo add when resetting the day
+      
   events = new Event();
   
-  System.out.println("EVENTS");
     
   //TODO: add requirements to unlock some events on calendar.
   currentLoc = events.getFirstLocOfDay();

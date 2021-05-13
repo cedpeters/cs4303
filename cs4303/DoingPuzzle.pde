@@ -7,7 +7,7 @@ class DoingPuzzle extends Block{
     super(x, y, width, height);
     
     puzzleStats = new Block(x, y, width, height * 0.05);
-    puzzle = new Puzzle(x, y + puzzleStats.height, width, height - (puzzleStats.height));
+    puzzle = new Block(x, y + puzzleStats.height, width, height - (puzzleStats.height));
   }
   
  
