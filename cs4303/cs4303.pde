@@ -45,6 +45,9 @@ void setup() {
   possibleEvents.add(new EventDinner());
   possibleEvents.add(new EventEconometrics());
   possibleEvents.add(new EventEconHistory());
+  possibleEvents.add(new EventBehaviouralEcon());
+  possibleEvents.add(new EventHistoryTut());
+  possibleEvents.add(new EventDiplomat());
   //possibleEvents.add(new Event("Disney Pub Quiz", sleepTime-2, sleepTime-1, "Do you know enough to win the pub quiz?"));
   //possibleEvents.add(new Event("Club 601", sleepTime - 4, sleepTime - 1, "You're sticky and you have a headache, but hey - they're playing your favourite song!"));
     
