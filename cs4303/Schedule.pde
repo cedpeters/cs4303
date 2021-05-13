@@ -5,8 +5,6 @@ class Schedule extends Block {
   
   void draw() {
     super.draw();
-    
-    scheduleEntries = new ArrayList();
         
     fill(0, 102, 153);
     textAlign(CENTER, CENTER);
@@ -17,11 +15,14 @@ class Schedule extends Block {
     }
     
     if(scheduleEntries != null) {
-      for(Block f : scheduleEntries) f.draw();
+      for(Block f : scheduleEntries) {
+        f.draw();
+      }
       return;
     }
     
     int[][] timeSlots = new int[3][sleepTime - startTime + 1];
+    scheduleEntries = new ArrayList();
     for(Event event : possibleEvents) {
       
       if(event.location.equals("Dorm Room") || !event.unlocked) { continue; }

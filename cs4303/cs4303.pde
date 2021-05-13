@@ -55,6 +55,7 @@ void setup() {
   possibleEvents.add(new EventHouseParty());
   possibleEvents.add(new EventBreakfast());
   possibleEvents.add(new EventDorm());
+  
     
   //TODO: add requirements to unlock some events on calendar.
   currentLoc = possibleEvents.get(0);
@@ -84,9 +85,7 @@ void setup() {
 }
 
 void draw() {
-  
-  System.out.println("DRAW");
-  
+    
   calcNextDialogue(null);
   
   header.draw();
