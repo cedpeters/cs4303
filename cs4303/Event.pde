@@ -11,7 +11,7 @@ class Event {
     eventNameToTimes.put("Breakfast (Uni Hall)", new int[]{9, 10, 1});
     eventNameToDescription.put("Breakfast (Uni Hall)", "There\'s nothing like the smell of fried food in the morning. Help yourself to a full plate of haggis, potatoes and bacon and have a seat at your usual table. It looks pretty empty today.");
 
-    eventNameToTimes.put("Career Fayre (The Student Union)", new int[]{14, 17, 1});
+    eventNameToTimes.put("Career Fayre (The Student Union)", new int[]{14, 17, 0});
     eventNameToDescription.put("Career Fayre (The Student Union)", "The huge Club 601 has been turned into a claustrophobic collection of alleyways, each one lined with the tables belonging to prospective employers. Some students float through the room, grabbing free pens and socks and avoiding the eyes of recruiters. Others dominate the attention of the people in corporate shirts, labouriously pouring a checklist of accomplishments into captive ears.");
     
     eventNameToTimes.put("Career Workshop (Careers Centre)", new int[]{10, 11, 0});
@@ -19,6 +19,9 @@ class Event {
     
     eventNameToTimes.put("Dinner (Uni Hall)", new int[]{17, 18, 1});
     eventNameToDescription.put("Dinner (Uni Hall)", "The room is bustling full of friends calling greetings to each other, walking over to say hi, and chattering about their days. The food is less heartwarming.");
+
+    eventNameToTimes.put("Disney Pub Quiz (The Adamson)", new int[]{16, 19, 1});
+    eventNameToDescription.put("Disney Pub Quiz (The Adamson)", "The dimly-lit bar is full of cheerful friends filling up on alcohol and chips, egging each other on to come up with confident, if usually incorrect, answers to the Disney-themed quiz questions.");
 
     eventNameToTimes.put("Dorm Room", new int[]{startTime, sleepTime-1, 1});
     eventNameToDescription.put("Dorm Room", "Welcome to your dorm room! This is your safe, quiet space. No one will bother you here (besides me, of course - no getting away from the narrator!), but you'll never get out of the game by staying here all day every day, either.");
@@ -60,6 +63,9 @@ class Event {
         break;
       case "Dinner (Uni Hall)":
         calcNextDialogueDinner(keyPressed);
+        break;
+      case "Disney Pub Quiz (The Adamson)":
+        calcNextDialogueDisneyPubQuiz(keyPressed);
         break;
       case "Econometrics Lecture (Upper College Lawn)":
         calcNextDialogueEconometrics(keyPressed);
@@ -271,7 +277,40 @@ class Event {
   
   //*************************Dinner********************************
   private void calcNextDialogueDinner(String keyPressed) {
-    changeView(3);
+    if(latestDialogue == null) {
+      latestDialogue = "No one you know is here.";
+      changeView(3);
+    }
+  }
+  
+  //************************Disney Pub Quiz*****************************
+  private void calcNextDialogueDisneyPubQuiz(String keyPressed) {
+    
+    if(latestDialogue == null) {
+      latestDialogue = "Stefan: Hey, Enya! Come join our team. Though fair warning, none of us knows anything about Disney." + 
+      "\nEnya: Cheers, Stefan! No worries, I don't know anything either." + 
+      "\nStefan: It's all good vibes at this table. No stressors here - not that I'm stressed, anyway.";
+      
+      latestDialogue += "\n1: Are you sure you're not stressed? Just because you've got a job lined up doesn't mean that you can't be worried about your marks this semester." + 
+      "\n2: Of course you're not stressed. I'm so jealous of you, you've got your immediate future all laid out in front of you!";
+      
+      dialogueResponseOptions = new String[]{
+           "\nStefan: *furrows his brow* Of course I'm not stressed. Now, are we going to win this or what?",
+           "\nStefan: Haha, yeah. Plus I'll get to adopt a dog soon once I'm out on my own. I can't wait!"
+         };
+    }
+    
+    else {
+      int numPressed = Integer.parseInt(keyPressed);
+                           
+      if(dialogueResponseOptions != null && numPressed > 0 && numPressed <= dialogueResponseOptions.length) {
+        latestDialogue += dialogueResponseOptions[numPressed - 1];
+        changeView(3);
+        dialogueResponseOptions = null;
+        
+        if(numPressed - 1 == 1) people.namesToStats.get("Stefan")[1] = 1;
+      }
+    }
   }
   
   //*************************Dorm Room*****************************
@@ -448,7 +487,8 @@ class Event {
       "\nMiri: Yeah, maybe Stefan will give me his. I'll just have to text him early, because he'll be at that Disney pub quiz at the Adamson from 4pm." + 
       "\n* You have gained a new event: Disney pub quiz. It will be on your schedule starting tomorrow. *";
       
-      //TODO: I NOW KNOW ABOUT THE PUB QUIZ!!
+      //I now know about the Disney pub quiz
+      eventNameToTimes.get("Disney Pub Quiz (The Adamson)")[2] = 1;
       
       //Increment number of times seen today
       people.namesToStats.get("Miri")[1]++;
