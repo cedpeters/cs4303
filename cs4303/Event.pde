@@ -3,6 +3,12 @@ class Event {
   HashMap<String, int[]> eventNameToTimes = new HashMap();
   HashMap<String, String> eventNameToDescription = new HashMap();
   
+  Add houseparty
+  Skim through todos on this page and cs4303
+  Add the reset at the end of each day (save knowledge, reset People)
+  Play through the whole thing
+  Send out to family
+  
   public Event() {
     //Events which are always available
     eventNameToTimes.put("Behavioural Econ (Irvine Building)", new int[]{16,18, 1});
@@ -20,7 +26,7 @@ class Event {
     eventNameToTimes.put("Dinner (Uni Hall)", new int[]{17, 18, 1});
     eventNameToDescription.put("Dinner (Uni Hall)", "The room is bustling full of friends calling greetings to each other, walking over to say hi, and chattering about their days. The food is less heartwarming.");
 
-    eventNameToTimes.put("Disney Pub Quiz (The Adamson)", new int[]{16, 19, 1});
+    eventNameToTimes.put("Disney Pub Quiz (The Adamson)", new int[]{16, 19, 0});
     eventNameToDescription.put("Disney Pub Quiz (The Adamson)", "The dimly-lit bar is full of cheerful friends filling up on alcohol and chips, egging each other on to come up with confident, if usually incorrect, answers to the Disney-themed quiz questions.");
 
     eventNameToTimes.put("Dorm Room", new int[]{startTime, sleepTime-1, 1});
@@ -72,6 +78,9 @@ class Event {
         break;
       case "Economic History (Upper College Lawn)":
         calcNextDialoguEconHistory(keyPressed);
+        break;
+      case "Economic History Tutorial (Castlecliffe)":
+        calcNextDialogueEconHistoryTut(keyPressed);
         break;
       case "JP Morgan Talk (Hotel Du Vin)":
         calcNextDialogueJPMorgan(keyPressed);
@@ -401,6 +410,21 @@ class Event {
     }
     
     else {
+      if(latestDialogue == null) {
+        boolean allSolved = true;
+        for(Puzzle p : gatheredPuzzles) {
+          if(p.solved == false) {
+           p.solved = true;
+           allSolved = false;
+          }
+        }
+        
+        if(allSolved) {
+          latestDialogue = "YOU WIN! You have gathered all of the puzzles.";
+        }
+      }
+      
+      
       //todo: if all puzzles are solved, just give a stats update. Otherwise, give stats update and provide option to solve a puzzle or move to next event.
     }
   }
@@ -469,6 +493,23 @@ class Event {
          people.namesToStats.get("Stefan")[2] = 1; //record that we know his favourite singer
         }
       }
+    }
+  }
+  
+    //************************Economic History Tutorial*****************************
+  private void calcNextDialogueEconHistoryTut(String keyPressed) {
+    
+    if(latestDialogue == null) {
+      latestDialogue = "Miri mentions the career fayre she attended earlier in the day, plus that her parents are stressing her out.";
+      
+      //I know that Miri is stressed out by her parents
+      people.namesToStats.get("Miri")[4] = 1;
+      
+      //Now know about career fayre
+      eventNameToTimes.get("Career Fayre (The Student Union)")[2] = 1;
+      
+      //Move on to next location.
+      changeView(3);
     }
   }
   
