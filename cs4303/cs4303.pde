@@ -4,7 +4,6 @@ Header header;
 Block body;
 float portionHeader = 0.1;
 
-
 //Game status
 String[] possibleViews = {"LocStart", "InConvo", "DoingPuzzle", "EventEnd"}; //<>//
 
@@ -27,6 +26,8 @@ int currentView;
 boolean keepOldDialogue;
 int currentDay;
 
+People people;
+
 Event events;
 
 String latestDialogue;
@@ -45,6 +46,7 @@ void setup() {
   gatheredPuzzles = new ArrayList();  //todo add when resetting the day
       
   events = new Event();
+  people = new People();
   
     
   //TODO: add requirements to unlock some events on calendar.

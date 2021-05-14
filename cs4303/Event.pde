@@ -28,10 +28,13 @@ class Event {
     
     eventNameToTimes.put("Economic History (Upper College Lawn)", new int[] {13, 15, 1});
     eventNameToDescription.put("Economic History (Upper College Lawn)", "The only module where listening to \'Hamilton\' counts as background research.");
-}
+  }
   
   
   public void calcNextDialogue(String keyPressed) {
+    
+    if(keyPressed == null && latestDialogue != null) return;
+    
     switch(currentLoc) {
       case "Breakfast (Uni Hall)":
         calcNextDialogueBreakfast(keyPressed);
@@ -62,13 +65,59 @@ class Event {
   
   //************************Breakfast*****************************
   private void calcNextDialogueBreakfast(String keyPressed) {
-    latestDialogue = "*Stefan plops into his usual seat next to you, brown hair tousled and eyes still a bit glazed with sleep.*"
-    + "\nStefan: 'Morning"
-    + "\nEnya: Good morning, Stefan. You look tired. Were you out late last night?"
-    + "\nStefan: No, I just stayed up too late watching YouTube as usual. Then I got butt-dialed right when I was getting in bed."
-    + "\nEnya: Yikes, really? Who was it?"
-    + "\nStefan: It was Peter. Dunno why I ever signed up to be a mentor in my fourth year, he's such a pain. He was on a night out, super wasted, babbling about how much his missed his sister of all things."
-    + "\nEnya: Aw, I'm sorry about that.";
+    
+    if(latestDialogue == null) {
+      latestDialogue = "*Stefan plops into his usual seat next to you, brown hair tousled and eyes still a bit glazed with sleep.*"
+      + "\nStefan: 'Morning"
+      + "\nEnya: Good morning, Stefan. You look tired. Were you out late last night?"
+      + "\nStefan: No, I just stayed up too late watching YouTube as usual. Then I got butt-dialed right when I was getting in bed."
+      + "\nEnya: Yikes, really? Who was it?"
+      + "\nStefan: It was Peter. Dunno why I ever signed up to mentor a first-year in my fourth year, he's such a pain. He was on a night out, super wasted, babbling about how much his missed his sister of all things."
+      + "\nEnya: Aw, I'm sorry about that.";
+      
+      //I know that Peter misses his sister
+      people.namesToStats.get("Peter")[3] = 1;
+      
+      //If I know his favourite singer, add the option to discuss that.
+      if(people.namesToStats.get("Stefan")[2] == 1) {
+        latestDialogue += 
+          "\n\n1: At least Peter's drunk voice is still a better sound than AJR, right?" + 
+          "\n2: Goodbye, Stefan";
+          
+          //keepOldDialogue = false;
+          
+        dialogueResponseOptions = new String[]{
+           "\nStefan: Excuse me, what?" + 
+           "\nEnya: Yeah, I mean, I haven\'t listened to a lot of AJR but it doesn't seem that good." + 
+           "\nStefan: You obviously have no idea what you're talking about. Hmm. If you'll be really careful, I can lend you my favourite CD of theirs. It's signed." + 
+           "\nEnya: Yes, I'll be very careful. Thank you." + 
+           "\n*Puzzle Acquired*",
+           "\nStefan: Goodbye, Enya."
+        };
+      }
+      
+      //I don't know his favourite singer, so just end the conversation.
+      else {
+       changeView(3); 
+      }
+    }
+    
+    //Conversation is already in progress. 
+    //By filtering process, a key must have been pressed.
+    //This is also never the response for advancing to a new location.
+    else {
+      int numPressed = Integer.parseInt(keyPressed);
+                           
+      if(dialogueResponseOptions != null && numPressed > 0 && numPressed <= dialogueResponseOptions.length) {
+        latestDialogue += dialogueResponseOptions[numPressed - 1];
+        changeView(3);
+        dialogueResponseOptions = null;
+        if(numPressed - 1 == 0) {
+         gatheredPuzzles.add(new Puzzle("Stefan" ));
+         people.namesToStats.get("Stefan")[0] = 1; //record that we've received his puzzle
+        }
+      }
+    }
   }
   
   //*************************Dinner********************************
@@ -113,10 +162,9 @@ class Event {
     
     //Subsequent Dialogue
     else {
-      //If no key has been pressed, don't change anything.
       
       //If key has been pressed, deal with it.
-      if(keyPressed != null && keyPressed.equals("C")) {
+      if(keyPressed.equals("C")) {
         latestDialogue = "C: At the end of each hour you will be offered the chance to attend any event currently happening on your calendar. " + 
        "\nType the letter next to the event you wish to attend and you will be transported there." + 
        "\nP: What is my goal here? How do I win the game?" + 
@@ -141,26 +189,21 @@ class Event {
            "\nThat\'s good. Try to hold onto that."
          };
          
-         String explanation = "In order to get out of the game, you need to solve three puzzles. Convince three people to lend you a prized possession, then bring those items here to solve the puzzle attached to each one. You will lose your puzzle pieces at the end of each day.";
+         String explanation = " In order to get out of the game, you need to solve three puzzles. Convince three people to lend you a prized possession, then bring those items here to solve the puzzle attached to each one. You will lose your puzzle pieces at the end of each day.";
          
          dialogueResponseOptions[0] += explanation;
          dialogueResponseOptions[1] += explanation;
-   }
-     
-     //Don't do anything until the key is pressed.
-     
-     //Once the key is pressed, if it's a valid answer, respond and end the dialogue.
-     if(keyPressed != null) {
-       int numPressed = Integer.parseInt(keyPressed);
+    }
+    
+    else {
+      int numPressed = Integer.parseInt(keyPressed);
                            
-       if(dialogueResponseOptions != null && numPressed > 0 && numPressed <= dialogueResponseOptions.length) {
-         latestDialogue += dialogueResponseOptions[numPressed - 1];
-         changeView(3);
-         dialogueResponseOptions = null;
-       }
-       
-       else return;
-     }
+      if(dialogueResponseOptions != null && numPressed > 0 && numPressed <= dialogueResponseOptions.length) {
+        latestDialogue += dialogueResponseOptions[numPressed - 1];
+        changeView(3);
+        dialogueResponseOptions = null;
+      }
+    }
   }
   
   private void regularDayDorm(String keyPressed) {
