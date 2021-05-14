@@ -8,6 +8,9 @@ class Event {
     eventNameToTimes.put("Behavioural Econ (Irvine Building)", new int[]{16,18, 1});
     eventNameToDescription.put("Behavioural Econ (Irvine Building)", "The room is crowded full of students taking notes on all the ways people do not, in fact, behave rationally at all times.");
     
+    eventNameToTimes.put("Career Workshop (Careers Centre)", new int[]{10, 11, 1});
+    eventNameToDescription.put("Career Workshop (Careers Centre)", "About twenty people crowd into a small room, perching on couches and standing by them. Before the talk starts, everyone focuses on grabbing as many free pens, pamphlets, and books as they can discreetly shove in their bags. The instructor walks in and pairs you up with your classmate, Miri, to practice sample interview questions.");
+    
     eventNameToTimes.put("Dorm Room", new int[]{startTime, sleepTime-1, 1});
     eventNameToDescription.put("Dorm Room", "Welcome to your dorm room! This is your safe, quiet space. No one will bother you here (besides me, of course - no getting away from the narrator!), but you'll never get out of the game by staying here all day every day, either.");
     
@@ -39,11 +42,18 @@ class Event {
       case "Breakfast (Uni Hall)":
         calcNextDialogueBreakfast(keyPressed);
         break;
+      case "Career Workshop (Careers Centre)":
+        calcNextDialogueCareerWorkshop(keyPressed);
+        break;
       case "Dorm Room":
         calcNextDialogueDormRoom(keyPressed);
         break;
       case "Dinner (Uni Hall)":
         calcNextDialogueDinner(keyPressed);
+        break;
+      case "Lunch (Uni Hall)":
+         changeView(3);
+        //calcNextDialogueLunch(keyPressed);
         break;
       default: 
         changeView(3); //move to the next hour
@@ -82,7 +92,8 @@ class Event {
       if(people.namesToStats.get("Stefan")[2] == 1) {
         latestDialogue += 
           "\n\n1: At least Peter's drunk voice is still a better sound than AJR, right?" + 
-          "\n2: Goodbye, Stefan";
+          "\n2: I lost my AJR CD, is there any way I could borrow yours?" + 
+          "\n3: Goodbye, Stefan";
           
           //keepOldDialogue = false;
           
@@ -92,6 +103,10 @@ class Event {
            "\nStefan: You obviously have no idea what you're talking about. Hmm. If you'll be really careful, I can lend you my favourite CD of theirs. It's signed." + 
            "\nEnya: Yes, I'll be very careful. Thank you." + 
            "\n*Puzzle Acquired*",
+           "Stefan: Oh, uh, I don't know. It's signed, I don't really lend it out." + 
+           "Enya: Are you sure? I really want to listen to it." + 
+           "Stefan: Yeah, sorry." + 
+           "Enya: Ugh, okay.",
            "\nStefan: Goodbye, Enya."
         };
       }
@@ -119,6 +134,30 @@ class Event {
       }
     }
   }
+  
+    //************************Career Workshop*****************************
+  private void calcNextDialogueCareerWorkshop(String keyPressed) {
+    
+    if(latestDialogue == null) {
+      latestDialogue = "Miri: Here, you interview me. I really need the practice, I'm hoping to get a couple interviews soon." + 
+      "\nEnya: Sure. Um, let's see. What is a problem you have faced while working on a team project, and how did you move past it?" + 
+      "\n*Miri blinks, stares into space for a minute, then begins talking with uncanny smoothness*" + 
+      "\nMiri: An example of a problem I have faced on a team project occurred last semester. I was doing a consulting project with Playfair, and our slides were not well-organised." + 
+      " I took on the challenge of coordinating everyone's work and polishing all of our slides, and we wound up with a strong presentation for our clients. The end result was positive feedback on our project." + 
+      "\nEnya: Um, okay. For the next one, try to sound a bit less rehearsed maybe? Next question: \"Describe a time when you faced conflicting deadlines. How did you cope with them?\"" + 
+      "\nMiri: I never know how to answer these. The truth is that I always try to schedule everything in advance but then I wind up scrabbling at the last minute and getting incredibly stressed out." + 
+      "\nEnya: Yeah that doesn't sound great. For me, sometimes it can be helpful to take a break when the deadlines get too overwhelming." + 
+      "\nMiri: Sometimes I do that, I'll take a couple hours off and read an Agatha Christie murder mystery. But usually I don't have time. Anyway, as for my official answer, I don't have one yet but I'll make a note to come up with something. " + 
+      "Maybe I'll say that I finish one deadline a week early.";
+      
+      //I know that Miri likes Agatha Christies
+      people.namesToStats.get("Miri")[2] = 1;
+      
+      //Move on to next location.
+      changeView(3);
+    }
+  }
+  
   
   //*************************Dinner********************************
   private void calcNextDialogueDinner(String keyPressed) {
@@ -217,6 +256,70 @@ class Event {
     }
   }
   
+  //************************Lunch*****************************
+  /*
+  private void calcNextDialogueLunch(String keyPressed) {
+    
+    if(latestDialogue == null) {
+      latestDialogue = "*Stefan plops into his usual seat next to you, brown hair tousled and eyes still a bit glazed with sleep.*"
+      + "\nStefan: 'Morning"
+      + "\nEnya: Good morning, Stefan. You look tired. Were you out late last night?"
+      + "\nStefan: No, I just stayed up too late watching YouTube as usual. Then I got butt-dialed right when I was getting in bed."
+      + "\nEnya: Yikes, really? Who was it?"
+      + "\nStefan: It was Peter. Dunno why I ever signed up to mentor a first-year in my fourth year, he's such a pain. He was on a night out, super wasted, babbling about how much his missed his sister of all things."
+      + "\nEnya: Aw, I'm sorry about that.";
+      
+      //I know that Peter misses his sister
+      people.namesToStats.get("Peter")[3] = 1;
+      
+      //If I know his favourite singer, add the option to discuss that.
+      if(people.namesToStats.get("Stefan")[2] == 1) {
+        latestDialogue += 
+          "\n\n1: At least Peter's drunk voice is still a better sound than AJR, right?" + 
+          "\n2: I lost my AJR CD, is there any way I could borrow yours?" + 
+          "\n3: Goodbye, Stefan";
+          
+          //keepOldDialogue = false;
+          
+        dialogueResponseOptions = new String[]{
+           "\nStefan: Excuse me, what?" + 
+           "\nEnya: Yeah, I mean, I haven\'t listened to a lot of AJR but it doesn't seem that good." + 
+           "\nStefan: You obviously have no idea what you're talking about. Hmm. If you'll be really careful, I can lend you my favourite CD of theirs. It's signed." + 
+           "\nEnya: Yes, I'll be very careful. Thank you." + 
+           "\n*Puzzle Acquired*",
+           "Stefan: Oh, uh, I don't know. It's signed, I don't really lend it out." + 
+           "Enya: Are you sure? I really want to listen to it." + 
+           "Stefan: Yeah, sorry." + 
+           "Enya: Ugh, okay.",
+           "\nStefan: Goodbye, Enya."
+        };
+      }
+      
+      //I don't know his favourite singer, so just end the conversation.
+      else {
+       changeView(3); 
+      }
+    }
+    
+    //Conversation is already in progress. 
+    //By filtering process, a key must have been pressed.
+    //This is also never the response for advancing to a new location.
+    else {
+      int numPressed = Integer.parseInt(keyPressed);
+                           
+      if(dialogueResponseOptions != null && numPressed > 0 && numPressed <= dialogueResponseOptions.length) {
+        latestDialogue += dialogueResponseOptions[numPressed - 1];
+        changeView(3);
+        dialogueResponseOptions = null;
+        if(numPressed - 1 == 0) {
+         gatheredPuzzles.add(new Puzzle("Stefan" ));
+         people.namesToStats.get("Stefan")[0] = 1; //record that we've received his puzzle
+        }
+      }
+    }
+    
+  }
+  */
   
 }
 
@@ -236,24 +339,6 @@ class EventCareerFayre extends Event{
   public void calcNextDialogue(String keyPressed) {
      currentView = 3; //Ready to move to next hour
   }
-}
-
-class EventCareerWork extends Event{
-
-  public EventCareerWork() {
-    
-    super(
-      "Career Workshop (Careers Centre)", 
-      10, 
-      11, 
-      "About twenty people crowd into a small room, perching on couches and standing by them. Before the talk starts, everyone focuses on grabbing as many free pens, pamphlets, and books as they can discreetly shove in their bags."
-    );
-  }
-  
-  public void calcNextDialogue(String keyPressed) {
-     currentView = 3; //Ready to move to next hour
-  }
-  
 }
 
 class EventJPMorgan extends Event{

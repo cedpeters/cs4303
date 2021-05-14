@@ -42,7 +42,7 @@ void setup() {
   currentTime = 8;
   currentView = 0; //<>//
   keepOldDialogue = true;
-  currentDay = 2;
+  currentDay = 1;
   gatheredPuzzles = new ArrayList();  //todo add when resetting the day
       
   events = new Event();
