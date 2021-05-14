@@ -33,6 +33,9 @@ class Event {
   
   public void calcNextDialogue(String keyPressed) {
     switch(currentLoc) {
+      case "Breakfast (Uni Hall)":
+        calcNextDialogueBreakfast(keyPressed);
+        break;
       case "Dorm Room":
         calcNextDialogueDormRoom(keyPressed);
         break;
@@ -57,9 +60,20 @@ class Event {
     return eventNameToTimes.get(e)[1]; 
   }
   
+  //************************Breakfast*****************************
+  private void calcNextDialogueBreakfast(String keyPressed) {
+    latestDialogue = "*Stefan plops into his usual seat next to you, brown hair tousled and eyes still a bit glazed with sleep.*"
+    + "\nStefan: 'Morning"
+    + "\nEnya: Good morning, Stefan. You look tired. Were you out late last night?"
+    + "\nStefan: No, I just stayed up too late watching YouTube as usual. Then I got butt-dialed right when I was getting in bed."
+    + "\nEnya: Yikes, really? Who was it?"
+    + "\nStefan: It was Peter. Dunno why I ever signed up to be a mentor in my fourth year, he's such a pain. He was on a night out, super wasted, babbling about how much his missed his sister of all things."
+    + "\nEnya: Aw, I'm sorry about that.";
+  }
+  
   //*************************Dinner********************************
   private void calcNextDialogueDinner(String keyPressed) {
-    
+    changeView(3);
   }
   
   //*************************Dorm Room*****************************
