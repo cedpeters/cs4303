@@ -4,6 +4,7 @@ class Event {
   HashMap<String, String> eventNameToDescription = new HashMap();
   
   Add houseparty
+  Fix agatha Christie
   Skim through todos on this page and cs4303
   Add the reset at the end of each day (save knowledge, reset People)
   Play through the whole thing
@@ -40,6 +41,9 @@ class Event {
 
     eventNameToTimes.put("Economic History Tutorial (Castlecliffe)", new int[]{18, 19, 1});
     eventNameToDescription.put("Economic History Tutorial (Castlecliffe)", "You\'re in a beautiful building next to the sea, though there\'s no window in this tutorial room. You nab a seat by the beautiful bricked up fireplace and listen to a discussion about the cyclical under-regulation of banks.");
+
+    eventNameToTimes.put("House Party (The Badlands)", new int[]{18, 22, 0});
+    eventNameToDescription.put("House Party (The Badlands)", "You're sticky and you have a headache, but hey - they're playing your favourite song!");
 
     eventNameToTimes.put("JP Morgan Talk (Hotel Du Vin)", new int[]{12, 14, 0});
     eventNameToDescription.put("JP Morgan Talk (Hotel Du Vin", "The fancy room is full of people in suits and nice dresses. There are beautiful vases of flowers on tables in the corners of the room. Looking more closely, you can see the streaks of sweat on the faces of older students, the wide smiles on their faces when they talk to recruiters a bit too constant to be genuine. When you sit down, Miri - her own smile plastered on - sits next to you.");
@@ -81,6 +85,9 @@ class Event {
         break;
       case "Economic History Tutorial (Castlecliffe)":
         calcNextDialogueEconHistoryTut(keyPressed);
+        break;
+      case "House Party (The Badlands)":
+        calcNextDialogueHouseParty(keyPressed);
         break;
       case "JP Morgan Talk (Hotel Du Vin)":
         calcNextDialogueJPMorgan(keyPressed);
@@ -419,9 +426,11 @@ class Event {
           }
         }
         
-        if(allSolved) {
+        if(allSolved && gatheredPuzzles.size() == 3) {
           latestDialogue = "YOU WIN! You have gathered all of the puzzles.";
         }
+        
+        else latestDialogue = "You have this many puzzles so far: " + gatheredPuzzles.size();
       }
       
       
@@ -513,6 +522,73 @@ class Event {
     }
   }
   
+  //************************House Party*****************************
+  private void calcNextDialogueHouseParty(String keyPressed) {
+    
+    if(latestDialogue == null) {
+      
+      if(people.namesToStats.get("Peter")[1] == 0) {
+        latestDialogue = "Peter: Um, Enya, right? I can't remember if we've met. I'm sorry, I gotta go.";
+        changeView(3);
+      }
+      
+      else if(people.namesToStats.get("Peter")[1] > 1) {
+       latestDialogue = "Peter: Wow, it's like you're stalking me. You're everywhere I go. I gotta go."; 
+       changeView(3);
+      }
+      
+      if(people.namesToStats.get("Peter")[1] == 1) {
+       //Peter will communicate with you 
+      }
+
+      Stopped here. Copy pasted from previous event. Need to finish.s
+      //If I know his favourite singer, add the option to discuss that.
+      if(people.namesToStats.get("Stefan")[2] == 1) {
+        latestDialogue += 
+          "\n\n1: At least Peter's drunk voice is still a better sound than AJR, right?" + 
+          "\n2: I lost my AJR CD, is there any way I could borrow yours?" + 
+          "\n3: Goodbye, Stefan";
+          
+          //keepOldDialogue = false;
+          
+        dialogueResponseOptions = new String[]{
+           "\nStefan: Excuse me, what?" + 
+           "\nEnya: Yeah, I mean, I haven\'t listened to a lot of AJR but it doesn't seem that good." + 
+           "\nStefan: You obviously have no idea what you're talking about. Hmm. If you'll be really careful, I can lend you my favourite CD of theirs. It's signed." + 
+           "\nEnya: Yes, I'll be very careful. Thank you." + 
+           "\n*Puzzle Acquired*",
+           "Stefan: Oh, uh, I don't know. It's signed, I don't really lend it out." + 
+           "Enya: Are you sure? I really want to listen to it." + 
+           "Stefan: Yeah, sorry." + 
+           "Enya: Ugh, okay.",
+           "\nStefan: Goodbye, Enya."
+        };
+      }
+      
+      //I don't know his favourite singer, so just end the conversation.
+      else {
+       changeView(3); 
+      }
+    }
+    
+    //Conversation is already in progress. 
+    //By filtering process, a key must have been pressed.
+    //This is also never the response for advancing to a new location.
+    else {
+      int numPressed = Integer.parseInt(keyPressed);
+                           
+      if(dialogueResponseOptions != null && numPressed > 0 && numPressed <= dialogueResponseOptions.length) {
+        latestDialogue += dialogueResponseOptions[numPressed - 1];
+        changeView(3);
+        dialogueResponseOptions = null;
+        if(numPressed - 1 == 0) {
+         gatheredPuzzles.add(new Puzzle("Stefan" ));
+         people.namesToStats.get("Stefan")[0] = 1; //record that we've received his puzzle
+        }
+      }
+    }
+  }
+  
   //************************JP Morgan Talk*****************************
   private void calcNextDialogueJPMorgan(String keyPressed) {
     
@@ -554,8 +630,8 @@ class Event {
       //Increment number of times seen today
       people.namesToStats.get("Peter")[1]++;
       
-      //New event discovered
-      //TODO: ADD THAT NOW KNOW HOUSE PARTY
+      //Now know about the house party.
+      eventNameToTimes.get("House Party (The Badlands)")[2] = 1;
             
       //Move on to next location.
       changeView(3);
@@ -563,41 +639,3 @@ class Event {
   }
   
 }
-
-/*
-
-class EventHouseParty extends Event{
-
-  public EventHouseParty() {
-    
-    super(
-      "House Party (The Badlands)", 
-      18, 
-      22, 
-      "You're sticky and you have a headache, but hey - they're playing your favourite song!"
-    );
-  }
-  
-  public void calcNextDialogue(String keyPressed) {
-     currentView = 3; //Ready to move to next hour
-  }
-}
-
-class EventDiplomat extends Event{
-
-  public EventDiplomat() {
-    
-    super(
-      "US Diplomat Talk (Medical Building)", 
-      9, 
-      10, 
-      "The environment is uncomfortably stuffy, and everyone seems to be dressed nicer than you."
-    );
-  }
-  
-  public void calcNextDialogue(String keyPressed) {
-     currentView = 3; //Ready to move to next hour
-  }
-  
-}
-*/
