@@ -105,6 +105,8 @@ void calcNextDialogue(String keyPressed) {
        
        int newStartTime = events.endTimeOf(currentLoc);
        
+       //TODO: PUT IN CHECK FOR THE END OF THE DAY.
+       
        latestDialogue += "\n\nChoose where you would like to be start at time " + newStartTime + ":"; 
        
        for(String e : possibleEventsEachHour.get(newStartTime)) {

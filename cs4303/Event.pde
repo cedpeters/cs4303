@@ -11,6 +11,9 @@ class Event {
     eventNameToTimes.put("Breakfast (Uni Hall)", new int[]{9, 10, 1});
     eventNameToDescription.put("Breakfast (Uni Hall)", "There\'s nothing like the smell of fried food in the morning. Help yourself to a full plate of haggis, potatoes and bacon and have a seat at your usual table. It looks pretty empty today.");
 
+    eventNameToTimes.put("Career Fayre (The Student Union)", new int[]{14, 17, 1});
+    eventNameToDescription.put("Career Fayre (The Student Union)", "The huge Club 601 has been turned into a claustrophobic collection of alleyways, each one lined with the tables belonging to prospective employers. Some students float through the room, grabbing free pens and socks and avoiding the eyes of recruiters. Others dominate the attention of the people in corporate shirts, labouriously pouring a checklist of accomplishments into captive ears.");
+    
     eventNameToTimes.put("Career Workshop (Careers Centre)", new int[]{10, 11, 0});
     eventNameToDescription.put("Career Workshop (Careers Centre)", "About twenty people crowd into a small room, perching on couches and standing by them. Before the talk starts, everyone focuses on grabbing as many free pens, pamphlets, and books as they can discreetly shove in their bags. The instructor walks in and pairs you up with your classmate, Miri, to practice sample interview questions.");
     
@@ -46,6 +49,9 @@ class Event {
       case "Breakfast (Uni Hall)":
         calcNextDialogueBreakfast(keyPressed);
         break;
+      case "Career Fayre (The Student Union)":
+        calcNextDialogueCareerFayre(keyPressed);
+        break;
       case "Career Workshop (Careers Centre)":
         calcNextDialogueCareerWorkshop(keyPressed);
         break;
@@ -54,6 +60,9 @@ class Event {
         break;
       case "Dinner (Uni Hall)":
         calcNextDialogueDinner(keyPressed);
+        break;
+      case "Econometrics Lecture (Upper College Lawn)":
+        calcNextDialogueEconometrics(keyPressed);
         break;
       case "Economic History (Upper College Lawn)":
         calcNextDialoguEconHistory(keyPressed);
@@ -81,6 +90,9 @@ class Event {
     if(e.equals("Dorm Room")) return currentTime + 1;
     return eventNameToTimes.get(e)[1]; 
   }
+  
+  
+  //TODO: make the *new event: etc* notifications only show the first time you learn about them!
   
   //************************Breakfast*****************************
   private void calcNextDialogueBreakfast(String keyPressed) {
@@ -147,6 +159,83 @@ class Event {
     }
   }
   
+ //************************Career Fayre*****************************
+  private void calcNextDialogueCareerFayre(String keyPressed) {
+    
+    if(latestDialogue == null) {
+      latestDialogue = "*Choose whether you'd like to talk to (1) Peter or (2) Miri. *";
+      
+      dialogueResponseOptions = new String[] {
+        "\n* You find Peter belly-up to the Amazon booth, grabbing a portable charger and awkwardly nodding at the recruiter who seems to have decided not to attempt her spiel. * ",
+        "\n* You find Miri in deep conversation with a Suisse representative about the various graduate routes they offer. After ten minutes, you manage to catch her attention as she's moving to the next booth. *"
+      };
+    }
+    
+    //Conversation is already in progress. 
+    //By filtering process, a key must have been pressed.
+    //This is also never the response for advancing to a new location.
+    else {
+      int numPressed = Integer.parseInt(keyPressed);
+                           
+      if(dialogueResponseOptions != null && numPressed > 0 && numPressed <= dialogueResponseOptions.length) {
+        latestDialogue += dialogueResponseOptions[numPressed - 1];
+        dialogueResponseOptions = null;
+        
+        if(numPressed - 1 == 0) {
+            people.namesToStats.get("Peter")[1]++; //increment times seen today
+            latestDialogue += "\nPeter: Oh, hi, Enya. Look at all this stuff I've got! I'll never have to buy pens again." + 
+            "\nEnya: Wow, you've definitely got a lot of bags and pens. Have you learned about any interesting options for the future?" + 
+            "\nPeter: *grimaces* I don't know, that's a long ways away. It all seems very stressful, I mean look at some of these people. It's like they're bargaining for their life." + 
+            "\n* New fact learned about Peter: he hates thinking about the future* " + 
+            "\n Enya: Well, I'm glad the stuff is worth it even if the companies aren't very exciting." + 
+            "\nPeter: Yeah. Though I might try to give back these massive books they gave me when I came in, full of employers. If I'd wanted a weighty lecture on getting a job, I would have gone to that careers centre talk earlier." +
+            "\nEnya: Wait, what talk?" +
+            "\nPeter: At 10, there was a workshop at the careers centre. It sounds pretty boring, not going to lie." + 
+            "\nEnya: to be fair, you're just a first-year. You might find all of this a bit less mind-numbing in a couple years." +
+            "\nPeter: *pulls a face* Maybe." + 
+            "\n* New event discovered: 10 careers workshop. It will appear on your schedule tomorrow. *";
+            
+            people.namesToStats.get("Peter")[2]++; //We know Peter hates thinking about the future
+            
+            eventNameToTimes.get("Career Workshop (Careers Centre)")[2] = 1; //We know about the careers workshop
+            
+            changeView(3);
+            
+        }
+        else if(numPressed - 1 == 1) {
+          
+            people.namesToStats.get("Miri")[1]++; //increment times seen today 
+            
+            if(people.namesToStats.get("Miri")[1] == 1) {
+              //first time seeing her today
+              latestDialogue += "\nMiri: Hi, you're Enya, right? I can't talk right now, I'm busy.";
+              changeView(3);
+            }
+            
+            else if(people.namesToStats.get("Miri")[1] > 2) {
+             //Seen her too many times
+               latestDialogue += "\nMiri: No offense, but I've already talked to you a lot today. I need to network with more people now.";
+               changeView(3);
+            }
+            
+            else {
+             //Seen her exactly once
+             latestDialogue += "\nMiri: Oh, hi again, Enya! It's a small world, haha. ";
+             
+             if(people.namesToStats.get("Miri")[2] == 1 && people.namesToStats.get("Miri")[3] == 0 && people.namesToStats.get("Miri")[4] == 1) { 
+               //I know about Agatha Christie, she didn't tell me about Agatha Christie today, and I know about her parental stress
+              //TODO: add these as separate dialogue trees when have more time.
+                latestDialogue += "*You tell Miri about your parents being stressful, and about how much you love Agatha Christie novels, and she lends you her laptop. Puzzle acquired!";
+                gatheredPuzzles.add(new Puzzle("Miri"));
+                people.namesToStats.get("Miri")[0] = 1; //record that we've received her puzzle
+                changeView(3);
+             }
+            }
+        }
+      }
+    }
+  }
+  
     //************************Career Workshop*****************************
   private void calcNextDialogueCareerWorkshop(String keyPressed) {
     
@@ -168,6 +257,9 @@ class Event {
       
       //Increment number of times seen today
       people.namesToStats.get("Miri")[1]++;
+      
+      //She told me about Agatha Christie today
+      people.namesToStats.get("Miri")[3] = 1;
       
       //TODO: MUST ADD A WAY TO PREVENT MIRI FROM MENTIONING AGATHA CHRISTIE
       
@@ -274,6 +366,17 @@ class Event {
     }
   }
   
+    //************************Econometrics*****************************
+  private void calcNextDialogueEconometrics(String keyPressed) {
+    
+    if(latestDialogue == null) {
+      latestDialogue = "It turns out you're the only person in your friend group who made it to class today. No one to talk to, but you do get to learn about instrumental variables for two hours.";
+
+      //Move on to next location.
+      changeView(3);
+    }
+  }
+  
   //************************Economic History*****************************
   private void calcNextDialoguEconHistory(String keyPressed) {
     
@@ -324,8 +427,7 @@ class Event {
         changeView(3);
         dialogueResponseOptions = null;
         if(numPressed - 1 == 0) {
-         gatheredPuzzles.add(new Puzzle("Stefan" ));
-         people.namesToStats.get("Stefan")[0] = 1; //record that we've received his puzzle
+         people.namesToStats.get("Stefan")[2] = 1; //record that we know his favourite singer
         }
       }
     }
@@ -382,22 +484,6 @@ class Event {
 }
 
 /*
-
-class EventCareerFayre extends Event{
-
-  public EventCareerFayre() {
-    super(
-      "Career Fayre (The Student Union)", 
-      14, 
-      17, 
-      "The huge Club 601 has been turned into a claustrophobic collection of alleyways, each one lined with the tables belonging to prospective employers. Some students float through the room, grabbing free pens and socks and avoiding the eyes of recruiters. Others dominate the attention of the people in corporate shirts, labouriously pouring a checklist of accomplishments into captive ears."
-    );
-  }
-  
-  public void calcNextDialogue(String keyPressed) {
-     currentView = 3; //Ready to move to next hour
-  }
-}
 
 class EventHouseParty extends Event{
 
