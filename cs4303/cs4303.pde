@@ -77,9 +77,7 @@ void setup() {
 }
 
 void draw() {
-  
-  System.out.println("DRAW");
-    
+      
   calcNextDialogue(null);
   
   header.draw();

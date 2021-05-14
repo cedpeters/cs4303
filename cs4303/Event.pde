@@ -29,7 +29,7 @@ class Event {
     eventNameToTimes.put("Economic History Tutorial (Castlecliffe)", new int[]{18, 19, 1});
     eventNameToDescription.put("Economic History Tutorial (Castlecliffe)", "You\'re in a beautiful building next to the sea, though there\'s no window in this tutorial room. You nab a seat by the beautiful bricked up fireplace and listen to a discussion about the cyclical under-regulation of banks.");
 
-    eventNameToTimes.put("JP Morgan Talk (Hotel Du Vin)", new int[]{12, 14, 1});
+    eventNameToTimes.put("JP Morgan Talk (Hotel Du Vin)", new int[]{12, 14, 0});
     eventNameToDescription.put("JP Morgan Talk (Hotel Du Vin", "The fancy room is full of people in suits and nice dresses. There are beautiful vases of flowers on tables in the corners of the room. Looking more closely, you can see the streaks of sweat on the faces of older students, the wide smiles on their faces when they talk to recruiters a bit too constant to be genuine. When you sit down, Miri - her own smile plastered on - sits next to you.");
 
     eventNameToTimes.put("Lunch (Uni Hall)", new int[] {13, 14, 1});
@@ -59,8 +59,7 @@ class Event {
         calcNextDialogueJPMorgan(keyPressed);
         break;
       case "Lunch (Uni Hall)":
-         changeView(3);
-        //calcNextDialogueLunch(keyPressed);
+        calcNextDialogueLunch(keyPressed);
         break;
       default: 
         changeView(3); //move to the next hour
@@ -292,6 +291,29 @@ class Event {
       //Increment number of times seen today
       people.namesToStats.get("Miri")[1]++;
       
+      //Move on to next location.
+      changeView(3);
+    }
+  }
+  
+  //************************Lunch*****************************
+  private void calcNextDialogueLunch(String keyPressed) {
+    
+    if(latestDialogue == null) {
+      latestDialogue = "* Peter wanders up to Enya's table and sits down *" + 
+      "\nEnya: You okay?" + 
+      "\nPeter: Yup. Just a bit hungover still. Went on a bender last night and it's really hitting me today." + 
+      "\nEnya: Yikes, I hope you're taking it easy for the rest of the day." + 
+      "\nPeter: *groans* No, my friend Sam's birthday party is tonight. I'm supposed to bring booze and friends. I'm too tired to find either. Hey, Enya, if you want to come it's on Lamond drive starting at six tonight." + 
+      "\nEnya: Thanks, Peter. I'm not sure if I'll make it, but I appreciate the offer." + 
+      "\n* New event: you have discovered a house party which will be on your calendar starting tomorrow. *";
+      
+      //Increment number of times seen today
+      people.namesToStats.get("Peter")[1]++;
+      
+      //New event discovered
+      //TODO: ADD THAT NOW KNOW HOUSE PARTY
+            
       //Move on to next location.
       changeView(3);
     }

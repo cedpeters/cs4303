@@ -37,9 +37,11 @@ class Schedule extends Block {
       String key = event.getKey();
       int[] value = event.getValue();
       
+      if(key.equals("Dorm Room") || value[2] == 0) continue;
+      
       possibleEventsEachHour.get(value[0]).add(key);
       
-      if(key.equals("Dorm Room") || value[2] == 0) continue;
+      System.out.println("LOCATION TO BE ADDED: " + key);
       
       boolean foundOne = true;
       
