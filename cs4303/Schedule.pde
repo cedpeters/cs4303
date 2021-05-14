@@ -40,9 +40,7 @@ class Schedule extends Block {
       if(key.equals("Dorm Room") || value[2] == 0) continue;
       
       possibleEventsEachHour.get(value[0]).add(key);
-      
-      System.out.println("LOCATION TO BE ADDED: " + key);
-      
+            
       boolean foundOne = true;
       
       //Loop through possible columns

@@ -55,6 +55,9 @@ class Event {
       case "Dinner (Uni Hall)":
         calcNextDialogueDinner(keyPressed);
         break;
+      case "Economic History (Upper College Lawn)":
+        calcNextDialoguEconHistory(keyPressed);
+        break;
       case "JP Morgan Talk (Hotel Du Vin)":
         calcNextDialogueJPMorgan(keyPressed);
         break;
@@ -268,6 +271,63 @@ class Event {
     
     else {
       //todo: if all puzzles are solved, just give a stats update. Otherwise, give stats update and provide option to solve a puzzle or move to next event.
+    }
+  }
+  
+  //************************Economic History*****************************
+  private void calcNextDialoguEconHistory(String keyPressed) {
+    
+    if(latestDialogue == null) {
+      latestDialogue = "Stefan: Hi, Enya." + 
+      "\nEnya: Hey, Stefan. How's it going?" + 
+      "\nStefan: Fine. Pretty chill. I have a couple deadlines next week, but since I already have a job lined up my motivation is pretty down." + 
+      "\nEnya: That's so nice, it must take a lot of the stress out of your final semester." + 
+      "\nStefan: Definitely. I can't wait to move to London this summer! And I'm so glad I'm done with all those recruitment events. I heard JP Morgan did an event at Hotel Du Vin at noon today, but I'm already going to be working for Deutsche so I didn't bother going." + 
+      "\n* New event discovered: JP Morgan Talk. It will appear on your schedule tomorrow. *";
+      
+      //Increment times seen today
+      people.namesToStats.get("Peter")[1]++;
+      
+      //Now know about JP Morgan talk
+      eventNameToTimes.get("JP Morgan Talk (Hotel Du Vin)")[2] = 1;
+      
+      //If I know he likes dogs, add the option to discuss that.
+      if(people.namesToStats.get("Stefan")[1] == 1) {
+        latestDialogue += 
+          "\n\n1: Personally, I can't wait to move out after graduation next year so I can get a dog! I want a little fluffy one, maybe a Pomeranian." + 
+          "\n2: Looks like the lecture is starting, we'd better stop talking.";
+          
+          //keepOldDialogue = false;
+          
+        dialogueResponseOptions = new String[]{
+           "\nStefan: Ooh yeah, me took! My favourite band, AJR, tweeted \"Everyone should have a dog in their life\" and I definitely agree. " + 
+           "I've been stalking all the rescue websites I can find. But I want a really big dog, like a Dobermann. Or a German Shepherd." + 
+           "\n * New fact about Stefan: his favourite band is AJR. *",
+           "\nStefan: Oh, yeah."
+        };
+      }
+      
+      //I don't know his favourite singer, so just end the conversation.
+      else {
+       changeView(3); 
+      }
+    }
+    
+    //Conversation is already in progress. 
+    //By filtering process, a key must have been pressed.
+    //This is also never the response for advancing to a new location.
+    else {
+      int numPressed = Integer.parseInt(keyPressed);
+                           
+      if(dialogueResponseOptions != null && numPressed > 0 && numPressed <= dialogueResponseOptions.length) {
+        latestDialogue += dialogueResponseOptions[numPressed - 1];
+        changeView(3);
+        dialogueResponseOptions = null;
+        if(numPressed - 1 == 0) {
+         gatheredPuzzles.add(new Puzzle("Stefan" ));
+         people.namesToStats.get("Stefan")[0] = 1; //record that we've received his puzzle
+        }
+      }
     }
   }
   
