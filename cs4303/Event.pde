@@ -199,15 +199,9 @@ class Event {
     //Conversation is already in progress. 
     //By filtering process, a key must have been pressed.
     //This is also never the response for advancing to a new location.
-    else {
-      try {
-        int numPressed = Integer.parseInt(keyPressed);
-      }
-      
-      catch(Exception e) {
-       //Not a number. Ignore this input. 
-      }
-                           
+    else try {
+      int numPressed = Integer.parseInt(keyPressed);
+                      
       if(dialogueResponseOptions != null && numPressed > 0 && numPressed <= dialogueResponseOptions.length) {
         latestDialogue += dialogueResponseOptions[numPressed - 1];
         dialogueResponseOptions = null;
@@ -269,6 +263,10 @@ class Event {
             }
         }
       }
+    }
+    
+    catch(Exception e) {
+      //Not a number. Ignore. 
     }
   }
   
