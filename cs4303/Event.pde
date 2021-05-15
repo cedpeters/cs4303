@@ -257,8 +257,9 @@ class Event {
                 latestDialogue += "*You tell Miri about your parents being stressful, and about how much you love Agatha Christie novels, and she lends you her laptop. \nPuzzle acquired!";
                 gatheredPuzzles.add(new Puzzle("Miri"));
                 people.namesToStats.get("Miri")[0] = 1; //record that we've received her puzzle
-                changeView(3);
              }
+             
+             changeView(3);
             }
         }
       }
