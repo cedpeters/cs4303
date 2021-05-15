@@ -3,13 +3,6 @@ class Event {
   HashMap<String, int[]> eventNameToTimes = new HashMap();
   HashMap<String, String> eventNameToDescription = new HashMap();
   
-  Add houseparty
-  Fix agatha Christie
-  Skim through todos on this page and cs4303
-  Add the reset at the end of each day (save knowledge, reset People)
-  Play through the whole thing
-  Send out to family
-  
   public Event() {
     //Events which are always available
     eventNameToTimes.put("Behavioural Econ (Irvine Building)", new int[]{16,18, 1});
@@ -42,7 +35,7 @@ class Event {
     eventNameToTimes.put("Economic History Tutorial (Castlecliffe)", new int[]{18, 19, 1});
     eventNameToDescription.put("Economic History Tutorial (Castlecliffe)", "You\'re in a beautiful building next to the sea, though there\'s no window in this tutorial room. You nab a seat by the beautiful bricked up fireplace and listen to a discussion about the cyclical under-regulation of banks.");
 
-    eventNameToTimes.put("House Party (The Badlands)", new int[]{18, 22, 0});
+    eventNameToTimes.put("House Party (The Badlands)", new int[]{18, sleepTime - 1, 0});
     eventNameToDescription.put("House Party (The Badlands)", "You're sticky and you have a headache, but hey - they're playing your favourite song!");
 
     eventNameToTimes.put("JP Morgan Talk (Hotel Du Vin)", new int[]{12, 14, 0});
@@ -59,6 +52,9 @@ class Event {
     if(keyPressed == null && latestDialogue != null) return;
     
     switch(currentLoc) {
+      case "Behavioural Econ (Irvine Building)":
+        calcNextDialogueBehaviouralEcon(keyPressed);
+        break;
       case "Breakfast (Uni Hall)":
         calcNextDialogueBreakfast(keyPressed);
         break;
@@ -113,9 +109,14 @@ class Event {
     return eventNameToTimes.get(e)[1]; 
   }
   
-  
-  //TODO: make the *new event: etc* notifications only show the first time you learn about them!
-  
+    //*************************Behavioural Econ********************************
+  private void calcNextDialogueBehaviouralEcon(String keyPressed) {
+    if(latestDialogue == null) {
+      latestDialogue = "No one you know is here. There goes two hours.";
+      changeView(3);
+    }
+  }
+    
   //************************Breakfast*****************************
   private void calcNextDialogueBreakfast(String keyPressed) {
     
@@ -125,12 +126,14 @@ class Event {
       + "\nEnya: Good morning, Stefan. You look tired. Were you out late last night?"
       + "\nStefan: No, I just stayed up too late watching YouTube as usual. Then I got butt-dialed right when I was getting in bed."
       + "\nEnya: Yikes, really? Who was it?"
-      + "\nStefan: It was Peter. Dunno why I ever signed up to mentor a first-year in my fourth year, he's such a pain. He was on a night out, super wasted, babbling about how much his missed his sister of all things."
-      + "\nEnya: Aw, I'm sorry about that.";
+      + "\nStefan: It was Peter. Dunno why I ever signed up to mentor a first-year in my fourth year, he's such a pain. He was on a night out, super wasted, babbling about how much his missed his sister of all things." + 
+      "\nEnya: Aw, I'm sorry about that.";
       
-      //I know that Peter misses his sister
-      people.namesToStats.get("Peter")[3] = 1;
-      
+      if(people.namesToStats.get("Peter")[3] == 0) {
+       latestDialogue += "\n*New fact gained: Peter misses his sister. *" ;
+       people.namesToStats.get("Peter")[3] = 1;
+      }
+
       //Increment times seen today
       people.namesToStats.get("Peter")[1]++;
       
@@ -207,19 +210,23 @@ class Event {
             people.namesToStats.get("Peter")[1]++; //increment times seen today
             latestDialogue += "\nPeter: Oh, hi, Enya. Look at all this stuff I've got! I'll never have to buy pens again." + 
             "\nEnya: Wow, you've definitely got a lot of bags and pens. Have you learned about any interesting options for the future?" + 
-            "\nPeter: *grimaces* I don't know, that's a long ways away. It all seems very stressful, I mean look at some of these people. It's like they're bargaining for their life." + 
-            "\n* New fact learned about Peter: he hates thinking about the future* " + 
+            "\nPeter: *grimaces* I don't know, that's a long ways away. It all seems very stressful, I mean look at some of these people. It's like they're bargaining for their life." +  
             "\n Enya: Well, I'm glad the stuff is worth it even if the companies aren't very exciting." + 
             "\nPeter: Yeah. Though I might try to give back these massive books they gave me when I came in, full of employers. If I'd wanted a weighty lecture on getting a job, I would have gone to that careers centre talk earlier." +
             "\nEnya: Wait, what talk?" +
             "\nPeter: At 10, there was a workshop at the careers centre. It sounds pretty boring, not going to lie." + 
             "\nEnya: to be fair, you're just a first-year. You might find all of this a bit less mind-numbing in a couple years." +
-            "\nPeter: *pulls a face* Maybe." + 
-            "\n* New event discovered: 10 careers workshop. It will appear on your schedule tomorrow. *";
+            "\nPeter: *pulls a face* Maybe.";
             
-            people.namesToStats.get("Peter")[2]++; //We know Peter hates thinking about the future
+            if(people.namesToStats.get("Peter")[2] == 0) {
+              latestDialogue += "\n* New fact learned about Peter: he hates thinking about the future* "; 
+              people.namesToStats.get("Peter")[2] = 1;
+            }
             
-            eventNameToTimes.get("Career Workshop (Careers Centre)")[2] = 1; //We know about the careers workshop
+            if(eventNameToTimes.get("Career Workshop (Careers Centre)")[2] == 0) {
+              latestDialogue += "\n* New event discovered: 10 careers workshop. It will appear on your schedule tomorrow. *";
+              eventNameToTimes.get("Career Workshop (Careers Centre)")[2] = 1;
+            }
             
             changeView(3);
             
@@ -247,7 +254,7 @@ class Event {
              if(people.namesToStats.get("Miri")[2] == 1 && people.namesToStats.get("Miri")[3] == 0 && people.namesToStats.get("Miri")[4] == 1) { 
                //I know about Agatha Christie, she didn't tell me about Agatha Christie today, and I know about her parental stress
               //TODO: add these as separate dialogue trees when have more time.
-                latestDialogue += "*You tell Miri about your parents being stressful, and about how much you love Agatha Christie novels, and she lends you her laptop. Puzzle acquired!";
+                latestDialogue += "*You tell Miri about your parents being stressful, and about how much you love Agatha Christie novels, and she lends you her laptop. \nPuzzle acquired!";
                 gatheredPuzzles.add(new Puzzle("Miri"));
                 people.namesToStats.get("Miri")[0] = 1; //record that we've received her puzzle
                 changeView(3);
@@ -268,25 +275,41 @@ class Event {
       "\nMiri: An example of a problem I have faced on a team project occurred last semester. I was doing a consulting project with Playfair, and our slides were not well-organised." + 
       " I took on the challenge of coordinating everyone's work and polishing all of our slides, and we wound up with a strong presentation for our clients. The end result was positive feedback on our project." + 
       "\nEnya: Um, okay. For the next one, try to sound a bit less rehearsed maybe? Next question: \"Describe a time when you faced conflicting deadlines. How did you cope with them?\"" + 
-      "\nMiri: I never know how to answer these. The truth is that I always try to schedule everything in advance but then I wind up scrabbling at the last minute and getting incredibly stressed out." + 
-      "\nEnya: Yeah that doesn't sound great. For me, sometimes it can be helpful to take a break when the deadlines get too overwhelming." + 
-      "\nMiri: Sometimes I do that, I'll take a couple hours off and read an Agatha Christie murder mystery. But usually I don't have time. Anyway, as for my official answer, I don't have one yet but I'll make a note to come up with something. " + 
-      "Maybe I'll say that I finish one deadline a week early." + 
-      "\n* You know a new fact about Miri: she loves Agatha Christie novels. *";
+      "\nMiri: I never know how to answer these. The truth is that I always try to schedule everything in advance but then I wind up scrabbling at the last minute and getting incredibly stressed out.";
       
-      //I know that Miri likes Agatha Christies
-      people.namesToStats.get("Miri")[2] = 1;
+      latestDialogue += "\n1: Yeah that doesn't sound great. For me, sometimes it can be helpful to take a break when the deadlines get too overwhelming." + 
+      "\n2: I always just power through, drop everything else, and focus on getting work done during those times. No breaks is the best way to get through it.";
+      
+      dialogueResponseOptions = new String[]{
+           "\nMiri: Sometimes I do that, I'll take a couple hours off and read an Agatha Christie murder mystery. But usually I don't have time. Anyway, as for my official answer, I don't have one yet but I'll make a note to come up with something. " + 
+           "Maybe I'll say that I finish one deadline a week early.",
+           "\nMiri: Yeah, definitely. I put my nose to the grindstone and don't let up until the deadlines are done. I guess I'll just say that I work as hard as possible and also pretend that I'm better at scheduling work out to avoid these situations."
+      };
       
       //Increment number of times seen today
       people.namesToStats.get("Miri")[1]++;
-      
-      //She told me about Agatha Christie today
-      people.namesToStats.get("Miri")[3] = 1;
-      
-      //TODO: MUST ADD A WAY TO PREVENT MIRI FROM MENTIONING AGATHA CHRISTIE
-      
-      //Move on to next location.
-      changeView(3);
+
+    }
+    
+    else {
+      int numPressed = Integer.parseInt(keyPressed);
+                           
+      if(dialogueResponseOptions != null && numPressed > 0 && numPressed <= dialogueResponseOptions.length) {
+        latestDialogue += dialogueResponseOptions[numPressed - 1];
+        changeView(3);
+        dialogueResponseOptions = null;
+        
+        if(numPressed - 1 == 0) {
+          if(people.namesToStats.get("Miri")[2] == 0) {
+           latestDialogue += "\n* You know a new fact about Miri: she loves Agatha Christie novels. *"; 
+           //I know that Miri likes Agatha Christies
+           people.namesToStats.get("Miri")[2] = 1;
+          }
+          
+          //She told me about Agatha Christie today
+          people.namesToStats.get("Miri")[3] = 1;
+        }
+      }
     }
   }
   
@@ -294,7 +317,7 @@ class Event {
   //*************************Dinner********************************
   private void calcNextDialogueDinner(String keyPressed) {
     if(latestDialogue == null) {
-      latestDialogue = "No one you know is here.";
+      latestDialogue = "No one you know is here. There goes an hour.";
       changeView(3);
     }
   }
@@ -313,7 +336,7 @@ class Event {
       dialogueResponseOptions = new String[]{
            "\nStefan: *furrows his brow* Of course I'm not stressed. Now, are we going to win this or what?",
            "\nStefan: Haha, yeah. Plus I'll get to adopt a dog soon once I'm out on my own. I can't wait!"
-         };
+      };
     }
     
     else {
@@ -324,7 +347,10 @@ class Event {
         changeView(3);
         dialogueResponseOptions = null;
         
-        if(numPressed - 1 == 1) people.namesToStats.get("Stefan")[1] = 1;
+        if(numPressed - 1 == 1 && people.namesToStats.get("Stefan")[1] == 0) {
+          latestDialogue += "\n*New fact: Stefan loves dogs and is excited about adopting one. *";
+          people.namesToStats.get("Stefan")[1] = 1;
+        }
       }
     }
   }
@@ -338,10 +364,7 @@ class Event {
      else regularDayDorm(keyPressed);
      
      //Todo: add the dialogue for after solving the final puzzle (i.e. winning!)
-     
-     //todo: else regularDay(keyPressed); - can take a nap or work on puzzle
-     
-     //todo: currentDay == 3 (explain the rules of the game)
+          
   }
   
     private void firstDayDorm(String keyPressed) {
@@ -411,31 +434,32 @@ class Event {
   }
   
   private void regularDayDorm(String keyPressed) {
-    if(gatheredPuzzles.size() == 0) {
-      latestDialogue = "C: Welcome back to your dorm room. I\'m afraid there\'s not much to do here right now. Go find some prized items.";
-      changeView(3);
-    }
-    
-    else {
-      if(latestDialogue == null) {
-        boolean allSolved = true;
-        for(Puzzle p : gatheredPuzzles) {
-          if(p.solved == false) {
-           p.solved = true;
-           allSolved = false;
-          }
-        }
-        
-        if(allSolved && gatheredPuzzles.size() == 3) {
-          latestDialogue = "YOU WIN! You have gathered all of the puzzles.";
-        }
-        
-        else latestDialogue = "You have this many puzzles so far: " + gatheredPuzzles.size();
+      if(gatheredPuzzles.size() == 0) {
+        latestDialogue = "C: Welcome back to your dorm room. I\'m afraid there\'s not much to do here right now. Go find some prized items.";
+        changeView(3);
       }
       
-      
-      //todo: if all puzzles are solved, just give a stats update. Otherwise, give stats update and provide option to solve a puzzle or move to next event.
-    }
+      else {
+        if(latestDialogue == null) {
+          boolean allSolved = true;
+          for(Puzzle p : gatheredPuzzles) {
+            if(p.solved == false) {
+             p.solved = true;
+             allSolved = false;
+            }
+          }
+          
+          if(allSolved && gatheredPuzzles.size() == 3) {
+            latestDialogue = "YOU WIN! You have gathered all of the puzzles. GAME OVER!";
+          }
+          
+          else latestDialogue = "You have this many puzzles so far: " + gatheredPuzzles.size();
+          changeView(3);
+        }
+        
+        
+        //todo: if all puzzles are solved, just give a stats update. Otherwise, give stats update and provide option to solve a puzzle or move to next event.
+      }
   }
   
     //************************Econometrics*****************************
@@ -457,14 +481,16 @@ class Event {
       "\nEnya: Hey, Stefan. How's it going?" + 
       "\nStefan: Fine. Pretty chill. I have a couple deadlines next week, but since I already have a job lined up my motivation is pretty down." + 
       "\nEnya: That's so nice, it must take a lot of the stress out of your final semester." + 
-      "\nStefan: Definitely. I can't wait to move to London this summer! And I'm so glad I'm done with all those recruitment events. I heard JP Morgan did an event at Hotel Du Vin at noon today, but I'm already going to be working for Deutsche so I didn't bother going." + 
-      "\n* New event discovered: JP Morgan Talk. It will appear on your schedule tomorrow. *";
+      "\nStefan: Definitely. I can't wait to move to London this summer! And I'm so glad I'm done with all those recruitment events. I heard JP Morgan did an event at Hotel Du Vin at noon today, but I'm already going to be working for Deutsche so I didn't bother going.";
       
       //Increment times seen today
       people.namesToStats.get("Peter")[1]++;
       
       //Now know about JP Morgan talk
-      eventNameToTimes.get("JP Morgan Talk (Hotel Du Vin)")[2] = 1;
+      if(eventNameToTimes.get("JP Morgan Talk (Hotel Du Vin)")[2] == 0) {
+       latestDialogue += "\n* New event discovered: JP Morgan Talk. It will appear on your schedule tomorrow. *";
+       eventNameToTimes.get("JP Morgan Talk (Hotel Du Vin)")[2] = 1;
+      }
       
       //If I know he likes dogs, add the option to discuss that.
       if(people.namesToStats.get("Stefan")[1] == 1) {
@@ -511,11 +537,16 @@ class Event {
     if(latestDialogue == null) {
       latestDialogue = "Miri mentions the career fayre she attended earlier in the day, plus that her parents are stressing her out.";
       
-      //I know that Miri is stressed out by her parents
-      people.namesToStats.get("Miri")[4] = 1;
       
-      //Now know about career fayre
-      eventNameToTimes.get("Career Fayre (The Student Union)")[2] = 1;
+      if(people.namesToStats.get("Miri")[4] == 0) {
+       latestDialogue += "\n*You have gained a new event and a new fact. *"; 
+       //I know that Miri is stressed out by her parents
+        people.namesToStats.get("Miri")[4] = 1;
+        
+        //Now know about career fayre
+        eventNameToTimes.get("Career Fayre (The Student Union)")[2] = 1;
+      
+      }
       
       //Move on to next location.
       changeView(3);
@@ -537,54 +568,17 @@ class Event {
        changeView(3);
       }
       
-      if(people.namesToStats.get("Peter")[1] == 1) {
-       //Peter will communicate with you 
-      }
-
-      Stopped here. Copy pasted from previous event. Need to finish.s
-      //If I know his favourite singer, add the option to discuss that.
-      if(people.namesToStats.get("Stefan")[2] == 1) {
-        latestDialogue += 
-          "\n\n1: At least Peter's drunk voice is still a better sound than AJR, right?" + 
-          "\n2: I lost my AJR CD, is there any way I could borrow yours?" + 
-          "\n3: Goodbye, Stefan";
-          
-          //keepOldDialogue = false;
-          
-        dialogueResponseOptions = new String[]{
-           "\nStefan: Excuse me, what?" + 
-           "\nEnya: Yeah, I mean, I haven\'t listened to a lot of AJR but it doesn't seem that good." + 
-           "\nStefan: You obviously have no idea what you're talking about. Hmm. If you'll be really careful, I can lend you my favourite CD of theirs. It's signed." + 
-           "\nEnya: Yes, I'll be very careful. Thank you." + 
-           "\n*Puzzle Acquired*",
-           "Stefan: Oh, uh, I don't know. It's signed, I don't really lend it out." + 
-           "Enya: Are you sure? I really want to listen to it." + 
-           "Stefan: Yeah, sorry." + 
-           "Enya: Ugh, okay.",
-           "\nStefan: Goodbye, Enya."
-        };
-      }
-      
-      //I don't know his favourite singer, so just end the conversation.
+      //Peter will communicate with you 
       else {
-       changeView(3); 
-      }
-    }
-    
-    //Conversation is already in progress. 
-    //By filtering process, a key must have been pressed.
-    //This is also never the response for advancing to a new location.
-    else {
-      int numPressed = Integer.parseInt(keyPressed);
-                           
-      if(dialogueResponseOptions != null && numPressed > 0 && numPressed <= dialogueResponseOptions.length) {
-        latestDialogue += dialogueResponseOptions[numPressed - 1];
-        changeView(3);
-        dialogueResponseOptions = null;
-        if(numPressed - 1 == 0) {
-         gatheredPuzzles.add(new Puzzle("Stefan" ));
-         people.namesToStats.get("Stefan")[0] = 1; //record that we've received his puzzle
-        }
+        latestDialogue = "Peter: Hi, Enya! Fancy seeing you here."; 
+       //You know everything you need to.
+       if(people.namesToStats.get("Peter")[2] == 1 && people.namesToStats.get("Peter")[3] == 1) {
+         latestDialogue += "\n*You don't bring up the future and you mention his sister, and Peter lends you her necklace to fix. Puzzle acquired!*";
+         gatheredPuzzles.add(new Puzzle("Peter"));
+         people.namesToStats.get("Peter")[0] = 1; //record that we've received her puzzle
+       }
+       
+       changeView(3);
       }
     }
   }
@@ -601,11 +595,13 @@ class Event {
       latestDialogue += "\nEnya: Oh, right, yeah. It's too bad these events overlap." + 
       "\nMiri: Yeah, especially since Mr. De Sousa uses the Socratic method so there aren't any slides to summarize what we're missing. I wish he did give out slides, I'm not great at taking notes in real-time. My mark on the class test makes that clear enough." + 
       "\nEnya: Maybe you can get notes off one of our classmates and study them later." + 
-      "\nMiri: Yeah, maybe Stefan will give me his. I'll just have to text him early, because he'll be at that Disney pub quiz at the Adamson from 4pm." + 
-      "\n* You have gained a new event: Disney pub quiz. It will be on your schedule starting tomorrow. *";
+      "\nMiri: Yeah, maybe Stefan will give me his. I'll just have to text him early, because he'll be at that Disney pub quiz at the Adamson from 4pm.";
       
-      //I now know about the Disney pub quiz
-      eventNameToTimes.get("Disney Pub Quiz (The Adamson)")[2] = 1;
+      
+      if(eventNameToTimes.get("Disney Pub Quiz (The Adamson)")[2] == 0) {
+       latestDialogue += "\n* You have gained a new event: Disney pub quiz. It will be on your schedule starting tomorrow. *";
+       eventNameToTimes.get("Disney Pub Quiz (The Adamson)")[2] = 1;
+      }
       
       //Increment number of times seen today
       people.namesToStats.get("Miri")[1]++;
@@ -624,14 +620,16 @@ class Event {
       "\nPeter: Yup. Just a bit hungover still. Went on a bender last night and it's really hitting me today." + 
       "\nEnya: Yikes, I hope you're taking it easy for the rest of the day." + 
       "\nPeter: *groans* No, my friend Sam's birthday party is tonight. I'm supposed to bring booze and friends. I'm too tired to find either. Hey, Enya, if you want to come it's on Lamond drive starting at six tonight." + 
-      "\nEnya: Thanks, Peter. I'm not sure if I'll make it, but I appreciate the offer." + 
-      "\n* New event: you have discovered a house party which will be on your calendar starting tomorrow. *";
+      "\nEnya: Thanks, Peter. I'm not sure if I'll make it, but I appreciate the offer.";
       
       //Increment number of times seen today
       people.namesToStats.get("Peter")[1]++;
       
-      //Now know about the house party.
-      eventNameToTimes.get("House Party (The Badlands)")[2] = 1;
+      if(eventNameToTimes.get("House Party (The Badlands)")[2] == 0) {
+        latestDialogue += "\n* New event: you have discovered a house party which will be on your calendar starting tomorrow. *";
+        eventNameToTimes.get("House Party (The Badlands)")[2] = 1;
+      }
+
             
       //Move on to next location.
       changeView(3);

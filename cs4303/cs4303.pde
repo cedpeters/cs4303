@@ -5,7 +5,7 @@ Block body;
 float portionHeader = 0.1;
 
 //Game status
-String[] possibleViews = {"LocStart", "InConvo", "DoingPuzzle", "EventEnd"}; //<>//
+String[] possibleViews = {"LocStart", "InConvo", "DoingPuzzle", "EventEnd"}; //<>// //<>//
 
 String[] dialogueResponseOptions;
 
@@ -39,8 +39,8 @@ void setup() {
   
   startTime = 8;
   sleepTime = 22;
-  currentTime = 8;
-  currentView = 0; //<>//
+  currentTime = startTime;
+  currentView = 0; //<>// //<>//
   keepOldDialogue = true;
   currentDay = 1;
   gatheredPuzzles = new ArrayList();  //todo add when resetting the day
@@ -95,6 +95,22 @@ void calcNextDialogue(String keyPressed) {
   //End of an event: choose next location
   else if(currentView == 3) {
     
+    int endOfEvent = events.endTimeOf(currentLoc);
+    
+    if(endOfEvent == sleepTime) {
+     if(keyPressed == null) {
+      if(!latestDialogue.contains("continue to the next day")) {
+       latestDialogue += "\n It is the end of the day. Type C to continue to the next day."; 
+      }
+     }
+     
+     else if(keyPressed == "c" || keyPressed == "C") {
+      nextDay(); 
+     }
+     
+     return;
+    }
+    
     //It's time to move on but the player hasn't entered a command yet
     if(keyPressed == null) {
        if(possibleNextEvents != null) return; //If this has already been done, don't recreate the wheel
@@ -134,6 +150,21 @@ void advanceToNextEvent(String e) {
   latestDialogue = null;
   currentLoc = e;
 }
+
+void nextDay() {
+ possibleNextEvents = null;
+ currentView = 0;
+ currentTime = startTime;
+ latestDialogue = null;
+ currentLoc = events.getFirstLocOfDay();
+ keepOldDialogue = true;
+ currentDay ++;
+ scheduleEntries = null;
+ gatheredPuzzles = new ArrayList();
+ 
+ people.resetPeopleMemories();
+}
+ 
 
 void changeView(int view) {
  if(view == 3) {
