@@ -20,7 +20,7 @@ class Block {
   }
   
   void draw() {
-    fill(color(255, 0, 255));
+    fill(color(192, 207, 203));
     rect(position.x, position.y, width, height);
     if(this.text != null) {
       fill(0, 102, 153);

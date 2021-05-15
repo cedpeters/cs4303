@@ -5,7 +5,7 @@ Block body;
 float portionHeader = 0.1;
 
 //Game status
-String[] possibleViews = {"LocStart", "InConvo", "DoingPuzzle", "EventEnd"}; //<>// //<>//
+String[] possibleViews = {"LocStart", "InConvo", "DoingPuzzle", "EventEnd"}; //<>//
 
 String[] dialogueResponseOptions;
 
@@ -40,7 +40,7 @@ void setup() {
   startTime = 8;
   sleepTime = 22;
   currentTime = startTime;
-  currentView = 0; //<>// //<>//
+  currentView = 0; //<>//
   keepOldDialogue = true;
   currentDay = 1;
   gatheredPuzzles = new ArrayList();  //todo add when resetting the day
