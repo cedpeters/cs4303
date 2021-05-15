@@ -169,7 +169,7 @@ class Event {
     //Conversation is already in progress. 
     //By filtering process, a key must have been pressed.
     //This is also never the response for advancing to a new location.
-    else {
+    else try {
       int numPressed = Integer.parseInt(keyPressed);
                            
       if(dialogueResponseOptions != null && numPressed > 0 && numPressed <= dialogueResponseOptions.length) {
@@ -181,6 +181,10 @@ class Event {
          people.namesToStats.get("Stefan")[0] = 1; //record that we've received his puzzle
         }
       }
+    }
+    
+    catch(Exception e) {
+      //Not a number. Ignore. 
     }
   }
   
@@ -296,7 +300,7 @@ class Event {
 
     }
     
-    else {
+    else try {
       int numPressed = Integer.parseInt(keyPressed);
                            
       if(dialogueResponseOptions != null && numPressed > 0 && numPressed <= dialogueResponseOptions.length) {
@@ -315,6 +319,10 @@ class Event {
           people.namesToStats.get("Miri")[3] = 1;
         }
       }
+    }
+    
+    catch(Exception e) {
+      //Not a number. Ignore. 
     }
   }
   
@@ -344,7 +352,7 @@ class Event {
       };
     }
     
-    else {
+    else try {
       int numPressed = Integer.parseInt(keyPressed);
                            
       if(dialogueResponseOptions != null && numPressed > 0 && numPressed <= dialogueResponseOptions.length) {
@@ -357,6 +365,10 @@ class Event {
           people.namesToStats.get("Stefan")[1] = 1;
         }
       }
+    }
+    
+    catch(Exception e) {
+      //Not a number. Ignore. 
     }
   }
   
@@ -427,7 +439,7 @@ class Event {
          dialogueResponseOptions[1] += explanation;
     }
     
-    else {
+    else try {
       int numPressed = Integer.parseInt(keyPressed);
                            
       if(dialogueResponseOptions != null && numPressed > 0 && numPressed <= dialogueResponseOptions.length) {
@@ -435,6 +447,10 @@ class Event {
         changeView(3);
         dialogueResponseOptions = null;
       }
+    }
+    
+    catch(Exception e) {
+      //Not a number. Ignore. 
     }
   }
   
@@ -522,7 +538,7 @@ class Event {
     //Conversation is already in progress. 
     //By filtering process, a key must have been pressed.
     //This is also never the response for advancing to a new location.
-    else {
+    else try{
       int numPressed = Integer.parseInt(keyPressed);
                            
       if(dialogueResponseOptions != null && numPressed > 0 && numPressed <= dialogueResponseOptions.length) {
@@ -533,6 +549,10 @@ class Event {
          people.namesToStats.get("Stefan")[2] = 1; //record that we know his favourite singer
         }
       }
+    }
+    
+    catch(Exception e) {
+      //Not a number. Ignore. 
     }
   }
   
