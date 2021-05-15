@@ -132,11 +132,17 @@ void calcNextDialogue(String keyPressed) {
      }
     
      else {
-       int num = Integer.parseInt(keyPressed);
+       try {
+         int num = Integer.parseInt(keyPressed);
+         
+         if(num > possibleNextEvents.size()) return;
+        
+          advanceToNextEvent(possibleNextEvents.get(num - 1));
+       }
        
-       if(num > possibleNextEvents.size()) return;
-      
-        advanceToNextEvent(possibleNextEvents.get(num - 1));
+       catch(Exception e) {
+        //do nothing, it's an invalid number. 
+       }
      }
   }
   
