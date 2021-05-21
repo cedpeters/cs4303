@@ -496,7 +496,7 @@ class Event {
           else {
             latestDialogue = "You have acquired this many puzzles so far: " + gatheredPuzzles.size() + 
             " and you have not solved at least 1. Would you like to solve the puzzle piece from " + unsolved.name + "?" + 
-            "1: Yes, take me to the puzzle\n2: No, I'm just here to take a nap.";
+            "\n1: Yes, take me to the puzzle\n2: No, I'm just here to take a nap.";
             
             dialogueResponseOptions = new String[]{
               "",
@@ -524,7 +524,7 @@ class Event {
            break;
           }
         }
-        
+                
         changeView(2); //change to doing puzzle
         currentPuzzle = unsolved;
       }

@@ -49,7 +49,7 @@ void setup() {
   currentTime = startTime;
   currentView = 0; //<>//
   keepOldDialogue = true;
-  currentDay = 3;
+  currentDay = 2;
   gatheredPuzzles = new ArrayList();  //todo add when resetting the day
       
   events = new Event();
@@ -97,6 +97,8 @@ void draw() {
   
   //puzzle view
   else {
+    System.out.println("CURRENT VIEW IS 2!");
+    
     if(currentPuzzle == null) changeView(3);
     
     currentPuzzle.draw();
@@ -187,10 +189,8 @@ void nextDay() {
  
 
 void changeView(int view) {
- if(view == 3) {
-  this.currentView = 3;
-  //this.currentTime = events.endTimeOf(currentLoc);
- }
+  //todo: bounds checking
+ this.currentView = view;
 }
 
 void keyReleased() {
