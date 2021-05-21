@@ -97,7 +97,6 @@ void draw() {
   
   //puzzle view
   else {
-    System.out.println("CURRENT VIEW IS 2!");
     
     if(currentPuzzle == null) changeView(3);
     
@@ -194,6 +193,16 @@ void changeView(int view) {
 }
 
 void keyReleased() {
+  
+  if(currentView == 2 && currentPuzzle != null) {
+    if(key == CODED) {
+     if(keyCode == UP) currentPuzzle.makeMove(false, false);
+     else if(keyCode == DOWN) currentPuzzle.makeMove(false, true);
+     else if(keyCode == LEFT) currentPuzzle.makeMove(true, true);
+     else if(keyCode == RIGHT) currentPuzzle.makeMove(true, false);
+    }
+    return;
+  }
   if(key == 'c') calcNextDialogue("C");
   
   if(key == 'k') cheatAllKnowledgeToTrue();

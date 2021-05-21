@@ -9,6 +9,13 @@ class Puzzle {
   int[][] board;
   int[] currentEmpty;
   
+  int[][] wonBoard = new int[][] {
+    {1,2,3,4},
+    {5,6,7,8},
+    {9,10,11,12},
+    {13,14,15,0}
+  };
+  
  public Puzzle(String name) {
    this.name = name;
    this.solved = false;
@@ -60,24 +67,15 @@ class Puzzle {
   currentEmpty = new int[] {3,3};
   
   //todo: adjust difficulty depending on whose puzzle it is
-  for(int i = 0; i < 50; i++) {
+  //todo: set this to a reasonable default once done writing
+  for(int i = 0; i < 0; i++) {
     //Decide to change either x or y
     boolean moveX = random.nextBoolean();
     
     //Decide to either increase or decrease
     boolean increase = random.nextBoolean();
     
-    int[] newLoc;
-    
-    if(moveX) {
-     if(increase) newLoc = new int[] {currentEmpty[0] + 1, currentEmpty[1]};
-     else newLoc = new int[] {currentEmpty[0] - 1, currentEmpty[1]};
-    }
-    
-    else {
-      if(increase) newLoc = new int[] {currentEmpty[0], currentEmpty[1] + 1};
-      else newLoc = new int[] {currentEmpty[0], currentEmpty[1] - 1};
-    }
+    int[] newLoc = calcNewMove(moveX, increase);
     
     if(isValidLoc(newLoc)) moveToLoc(newLoc);
   }
@@ -93,20 +91,58 @@ class Puzzle {
    return true;
  }
  
+ private void makeMove(boolean moveX, boolean increase) {
+
+   int[] newLoc = calcNewMove(moveX, increase);
+      
+   if(isValidLoc(newLoc)) {
+    moveToLoc(newLoc);
+    
+    if(hasWon()) endOfPuzzle();
+   }
+ }
+ 
  private void moveToLoc(int[] newLoc) {
-   int valAtNewLoc = board[newLoc[0]][newLoc[1]];
+   int valAtNewLoc = board[newLoc[1]][newLoc[0]];
+      
+   board[newLoc[1]][newLoc[0]] = 0;
    
-   board[newLoc[0]][newLoc[1]] = 0;
-   
-   board[currentEmpty[0]][currentEmpty[1]] = valAtNewLoc;
+   board[currentEmpty[1]][currentEmpty[0]] = valAtNewLoc;
    
    currentEmpty = newLoc;
    
  }
  
+ private int[] calcNewMove(boolean moveX, boolean increase) {
+   
+   int[] newLoc;
+   
+   if(moveX) {
+     if(increase) newLoc = new int[] {currentEmpty[0] + 1, currentEmpty[1]};
+     else newLoc = new int[] {currentEmpty[0] - 1, currentEmpty[1]};
+    }
+    
+    else {
+      if(increase) newLoc = new int[] {currentEmpty[0], currentEmpty[1] - 1};
+      else newLoc = new int[] {currentEmpty[0], currentEmpty[1] + 1};
+    }
+    
+    return newLoc;
+ }
+ 
+ private boolean hasWon() {
+   for(int i = 0; i < board.length; i++) {
+    for(int j = 0; j < board[i].length; j++) {
+     if(board[i][j] != wonBoard[i][j]) return false; 
+    }
+   }
+   
+   return true;
+ }
+ 
  private void endOfPuzzle() {
   changeView(3);
-  latestDialogue = "";
+  latestDialogue = "Congratulations! You've solved the puzzle from " + name + ".";
   currentPuzzle = null;
  }
 }
