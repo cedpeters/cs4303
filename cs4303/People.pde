@@ -20,4 +20,20 @@ class People {
    int[] stefan = namesToStats.get("Stefan");
    stefan[0] = 0;
   }
+  
+  //Cheat to know all things about everyone
+  public void cheatAllKnowledgeToTrue() {
+    int[] stats = namesToStats.get("Peter");
+    stats[2] = 1;
+    stats[3] = 1;
+    
+    stats = namesToStats.get("Miri");
+    stats[2] = 1;
+    stats[4] = 1;
+    
+    stats = namesToStats.get("Stefan");
+    stats[1] = 1;
+    stats[2] = 1;
+    
+  }
 }

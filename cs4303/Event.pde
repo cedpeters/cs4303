@@ -109,6 +109,13 @@ class Event {
     return eventNameToTimes.get(e)[1]; 
   }
   
+  //Make all locations known.
+  public void cheatAllKnowledgeToTrue() {
+    for(HashMap.Entry<String, int[]> entry : eventNameToTimes.entrySet()) {
+      entry.getValue()[2] = 1;
+    }
+  }
+  
     //*************************Behavioural Econ********************************
   private void calcNextDialogueBehaviouralEcon(String keyPressed) {
     if(latestDialogue == null) {
@@ -400,7 +407,7 @@ class Event {
       //The dialogue that greets you on subsequent visits to the location
       else {
        latestDialogue = "C: Welcome back to your dorm room. I\'m afraid there\'s not much to do here, today.";
-       currentView = 3;
+       changeView(3);
       }
     }
     
@@ -413,7 +420,7 @@ class Event {
        "\nType the letter next to the event you wish to attend and you will be transported there." + 
        "\nP: What is my goal here? How do I win the game?" + 
        "\nC: Today is meant for exploring. I will explain the details tomorrow morning.";
-       currentView = 3;
+       changeView(3);
        keepOldDialogue = true;
       }
     }
@@ -461,26 +468,79 @@ class Event {
       }
       
       else {
-        if(latestDialogue == null) {
-          boolean allSolved = true;
+        dormPuzzleDialogue(keyPressed);
+        //todo: if all puzzles are solved, just give a stats update. Otherwise, give stats update and provide option to solve a puzzle or move to next event.
+      }
+  }
+  
+  private void dormPuzzleDialogue(String keyPressed) {
+   if(latestDialogue == null) {
+          Puzzle unsolved = null;
           for(Puzzle p : gatheredPuzzles) {
             if(p.solved == false) {
-             p.solved = true;
-             allSolved = false;
+             unsolved = p;
+             break;
             }
           }
           
-          if(allSolved && gatheredPuzzles.size() == 3) {
+          if(unsolved == null && gatheredPuzzles.size() == 3) {
             latestDialogue = "YOU WIN! You have gathered all of the puzzles. GAME OVER!";
+            changeView(3);
           }
           
-          else latestDialogue = "You have this many puzzles so far: " + gatheredPuzzles.size();
-          changeView(3);
+          else if (unsolved == null) {
+           latestDialogue = "You have " + gatheredPuzzles.size() + " puzzle pieces, and all of them are solved."; 
+           changeView(3);
+          }
+          
+          else {
+            latestDialogue = "You have acquired this many puzzles so far: " + gatheredPuzzles.size() + 
+            " and you have not solved at least 1. Would you like to solve the puzzle piece from " + unsolved.name + "?" + 
+            "1: Yes, take me to the puzzle\n2: No, I'm just here to take a nap.";
+            
+            dialogueResponseOptions = new String[]{
+              "",
+              ""
+            };
+          }
+      } 
+      
+    //Conversation is already in progress. 
+    //By filtering process, a key must have been pressed.
+    //This is also never the response for advancing to a new location.
+    else try {
+      int numPressed = Integer.parseInt(keyPressed);
+      
+      if(dialogueResponseOptions == null || numPressed <= 0 || numPressed > dialogueResponseOptions.length) return;
+                      
+      dialogueResponseOptions = null;
+
+      //Wants to solve a puzzle!
+      if(numPressed - 1 == 0) {
+        Puzzle unsolved = null;
+        for(Puzzle p : gatheredPuzzles) {
+          if(p.solved == false) {
+           unsolved = p;
+           break;
+          }
         }
         
-        
-        //todo: if all puzzles are solved, just give a stats update. Otherwise, give stats update and provide option to solve a puzzle or move to next event.
+        changeView(2); //change to doing puzzle
+        currentPuzzle = unsolved;
       }
+        
+      //Wants to do nothing!
+      else if(numPressed - 1 == 1) {
+        latestDialogue += "You take a nice, refreshing nap.";
+        changeView(3);
+      }
+    }
+    
+    catch(Exception e) {
+      //Not a number. Ignore. 
+    }
+        
+        
   }
   
     //************************Econometrics*****************************

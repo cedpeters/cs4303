@@ -6,6 +6,8 @@ float portionHeader = 0.1;
 
 PFont gameFont;
 
+Puzzle currentPuzzle;
+
 //Game status
 String[] possibleViews = {"LocStart", "InConvo", "DoingPuzzle", "EventEnd"}; //<>//
 
@@ -47,7 +49,7 @@ void setup() {
   currentTime = startTime;
   currentView = 0; //<>//
   keepOldDialogue = true;
-  currentDay = 1;
+  currentDay = 3;
   gatheredPuzzles = new ArrayList();  //todo add when resetting the day
       
   events = new Event();
@@ -83,22 +85,29 @@ void setup() {
 
 void draw() {
       
-  calcNextDialogue(null);
+  //Normal (dialogue) view
+  if(currentView != 2) {
   
-  header.draw();
+    calcNextDialogue(null);
+    
+    header.draw();
+    
+    bodyBlocks.get(currentView).draw();
+  }
   
-  bodyBlocks.get(currentView).draw();
+  //puzzle view
+  else {
+    if(currentPuzzle == null) changeView(3);
+    
+    currentPuzzle.draw();
+  }
     
 }
 
 void calcNextDialogue(String keyPressed) {
   
-  if(currentView == 2) {
-   //todo: deal with puzzle view
-  }
-  
   //End of an event: choose next location
-  else if(currentView == 3) {
+ if(currentView == 3) {
     
     int endOfEvent = events.endTimeOf(currentLoc);
     
@@ -187,13 +196,13 @@ void changeView(int view) {
 void keyReleased() {
   if(key == 'c') calcNextDialogue("C");
   
-  try {
-    int num = Character.getNumericValue(key);
-    System.out.println("NUM: " + num);
-    
-    calcNextDialogue(String.valueOf(key));
- 
-  }
+  if(key == 'k') cheatAllKnowledgeToTrue();
   
-  catch(Exception e)  {System.out.println("ERROR");}
+  else calcNextDialogue(key + "");
+}
+
+void cheatAllKnowledgeToTrue() {
+  events.cheatAllKnowledgeToTrue();
+  people.cheatAllKnowledgeToTrue();
+  scheduleEntries = null; //force reset the calendar
 }
