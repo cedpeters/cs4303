@@ -67,8 +67,7 @@ class Puzzle {
   currentEmpty = new int[] {3,3};
   
   //todo: adjust difficulty depending on whose puzzle it is
-  //todo: set this to a reasonable default once done writing
-  for(int i = 0; i < 20; i++) {
+  for(int i = 0; i < 30; i++) {
     //Decide to change either x or y
     boolean moveX = random.nextBoolean();
     

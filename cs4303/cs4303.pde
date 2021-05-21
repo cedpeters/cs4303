@@ -16,7 +16,7 @@ String[] dialogueResponseOptions;
 
 ArrayList<String> possibleNextEvents;
 
-ArrayList<Block> scheduleEntries; //TODO: reset to null when changing day
+ArrayList<Block> scheduleEntries; //.: reset to null when changing day
 
 HashMap<Integer, ArrayList<String>> possibleEventsEachHour;
 
@@ -43,22 +43,21 @@ void setup() {
   fullScreen();
   
   smallFont = createFont("arial", 12);
-  bigFont = createFont("arial", 20);
+  bigFont = createFont("arial", 18);
   textFont(bigFont);
   
   startTime = 8;
   sleepTime = 22; //<>//
   currentTime = startTime;
-  currentView = 0; //<>//
+  currentView = 0;
   keepOldDialogue = true;
   currentDay = 1;
-  gatheredPuzzles = new ArrayList();  //todo add when resetting the day
+  gatheredPuzzles = new ArrayList(); 
       
   events = new Event();
   people = new People();
   
     
-  //TODO: add requirements to unlock some events on calendar.
   currentLoc = events.getFirstLocOfDay();
   
   
@@ -81,7 +80,7 @@ void setup() {
   bodyBlocks.add(locStart);
   bodyBlocks.add(inConvo);
   bodyBlocks.add(doingPuzzle);
-  bodyBlocks.add(locStart); //the end is identical to the start (todo: maybe change)
+  bodyBlocks.add(locStart);
   
 }
 
@@ -137,9 +136,7 @@ void calcNextDialogue(String keyPressed) {
        if(keepOldDialogue == false) latestDialogue = "";
        
        int newStartTime = events.endTimeOf(currentLoc);
-       
-       //TODO: PUT IN CHECK FOR THE END OF THE DAY.
-       
+              
        latestDialogue += "\n\nChoose where you would like to be start at time " + newStartTime + ":00:"; 
        
        for(String e : possibleEventsEachHour.get(newStartTime)) {
@@ -190,7 +187,6 @@ void nextDay() {
  
 
 void changeView(int view) {
-  //todo: bounds checking
  this.currentView = view;
 }
 
