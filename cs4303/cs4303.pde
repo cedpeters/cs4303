@@ -4,12 +4,13 @@ Header header;
 Block body;
 float portionHeader = 0.1;
 
-PFont gameFont;
+PFont smallFont;
+PFont bigFont;
 
 Puzzle currentPuzzle;
 
-//Game status
-String[] possibleViews = {"LocStart", "InConvo", "DoingPuzzle", "EventEnd"}; //<>//
+//Game status //<>//
+String[] possibleViews = {"LocStart", "InConvo", "DoingPuzzle"};
 
 String[] dialogueResponseOptions;
 
@@ -41,15 +42,16 @@ void setup() {
   
   fullScreen();
   
-  gameFont = createFont("arial", 12);
-  textFont(gameFont);
+  smallFont = createFont("arial", 12);
+  bigFont = createFont("arial", 20);
+  textFont(bigFont);
   
   startTime = 8;
-  sleepTime = 22;
+  sleepTime = 22; //<>//
   currentTime = startTime;
   currentView = 0; //<>//
   keepOldDialogue = true;
-  currentDay = 2;
+  currentDay = 1;
   gatheredPuzzles = new ArrayList();  //todo add when resetting the day
       
   events = new Event();
@@ -138,7 +140,7 @@ void calcNextDialogue(String keyPressed) {
        
        //TODO: PUT IN CHECK FOR THE END OF THE DAY.
        
-       latestDialogue += "\n\nChoose where you would like to be start at time " + newStartTime + ":"; 
+       latestDialogue += "\n\nChoose where you would like to be start at time " + newStartTime + ":00:"; 
        
        for(String e : possibleEventsEachHour.get(newStartTime)) {
          possibleNextEvents.add(e);

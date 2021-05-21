@@ -25,7 +25,7 @@ class Block {
     if(this.text != null) {
       fill(0, 102, 153);
       textAlign(CENTER, CENTER);
-      text(text, position.x, position.y, width, height);
+      text(text, position.x + width * 0.01, position.y + height * 0.01, width * 0.98, height*0.98);
     }
   }
   

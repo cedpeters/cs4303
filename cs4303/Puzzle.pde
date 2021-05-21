@@ -51,7 +51,7 @@ class Puzzle {
      text("" + board[i][j], leftOfRow, topOfRow, numWidth, numHeight);
     }
    }
-   textFont(gameFont);
+   textFont(bigFont);
  }
  
  private void generateBoard() {

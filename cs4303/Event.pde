@@ -133,7 +133,7 @@ class Event {
       + "\nEnya: Good morning, Stefan. You look tired. Were you out late last night?"
       + "\nStefan: No, I just stayed up too late watching YouTube as usual. Then I got butt-dialed right when I was getting in bed."
       + "\nEnya: Yikes, really? Who was it?"
-      + "\nStefan: It was Peter. Dunno why I ever signed up to mentor a first-year in my fourth year, he's such a pain. He was on a night out, super wasted, babbling about how much his missed his sister of all things." + 
+      + "\nStefan: It was Peter. Dunno why I ever signed up to mentor a first-year in my fourth year, he's such a pain. He was on a night out, super wasted, babbling about how much he missed his sister of all things." + 
       "\nEnya: Aw, I'm sorry about that.";
       
       if(people.namesToStats.get("Peter")[3] == 0) {
@@ -147,9 +147,7 @@ class Event {
           "\n\n1: At least Peter's drunk voice is still a better sound than AJR, right?" + 
           "\n2: I lost my AJR CD, is there any way I could borrow yours?" + 
           "\n3: Goodbye, Stefan";
-          
-          //keepOldDialogue = false;
-          
+                    
         dialogueResponseOptions = new String[]{
            "\nStefan: Excuse me, what?" + 
            "\nEnya: Yeah, I mean, I haven\'t listened to a lot of AJR but it doesn't seem that good." + 
@@ -232,7 +230,7 @@ class Event {
             }
             
             if(eventNameToTimes.get("Career Workshop (Careers Centre)")[2] == 0) {
-              latestDialogue += "\n* New event discovered: 10 careers workshop. It will appear on your schedule tomorrow. *";
+              latestDialogue += "\n* New event discovered: 10am careers workshop. It will appear on your schedule tomorrow. *";
               eventNameToTimes.get("Career Workshop (Careers Centre)")[2] = 1;
             }
             
@@ -290,7 +288,7 @@ class Event {
       "\nEnya: Um, okay. For the next one, try to sound a bit less rehearsed maybe? Next question: \"Describe a time when you faced conflicting deadlines. How did you cope with them?\"" + 
       "\nMiri: I never know how to answer these. The truth is that I always try to schedule everything in advance but then I wind up scrabbling at the last minute and getting incredibly stressed out.";
       
-      latestDialogue += "\n1: Yeah that doesn't sound great. For me, sometimes it can be helpful to take a break when the deadlines get too overwhelming." + 
+      latestDialogue += "\n\n1: Yeah that doesn't sound great. For me, sometimes it can be helpful to take a break when the deadlines get too overwhelming." + 
       "\n2: I always just power through, drop everything else, and focus on getting work done during those times. No breaks is the best way to get through it.";
       
       dialogueResponseOptions = new String[]{
@@ -347,7 +345,7 @@ class Event {
       "\nEnya: Cheers, Stefan! No worries, I don't know anything either." + 
       "\nStefan: It's all good vibes at this table. No stressors here - not that I'm stressed, anyway.";
       
-      latestDialogue += "\n1: Are you sure you're not stressed? Just because you've got a job lined up doesn't mean that you can't be worried about your marks this semester." + 
+      latestDialogue += "\n\n1: Are you sure you're not stressed? Just because you've got a job lined up doesn't mean that you can't be worried about your marks this semester." + 
       "\n2: Of course you're not stressed. I'm so jealous of you, you've got your immediate future all laid out in front of you!";
       
       dialogueResponseOptions = new String[]{
@@ -395,9 +393,9 @@ class Event {
       
       //The very first dialogue of the game
       if(currentTime == 8) {
-        latestDialogue = "C: Good morning, Enya. Welcome to your new life." +
-         "\nE: Wh-where am I? What's going on?" + 
-         "\nC: You're in St Andrews. It's Friday of week 4 and you're in your first day here out of many." + 
+        latestDialogue = "Computer: Good morning, Enya. Welcome to your new life." +
+         "\nEnya: Wh-where am I? What's going on?" + 
+         "\nComputer: You're in St Andrews. Your name is Enya. It's Friday of week 4 and you're in your first day here out of many. Since this is a video game, everyone else thinks you've always been here." + 
          "\nType \'C\' to continue this conversation.";
       }
       
@@ -413,10 +411,10 @@ class Event {
       
       //If key has been pressed, deal with it.
       if(keyPressed.equals("C")) {
-        latestDialogue = "C: At the end of each hour you will be offered the chance to attend any event currently happening on your calendar. " + 
-       "\nType the letter next to the event you wish to attend and you will be transported there." + 
-       "\nP: What is my goal here? How do I win the game?" + 
-       "\nC: Today is meant for exploring. I will explain the details tomorrow morning.";
+        latestDialogue = "Computer: At the end of each hour you will be offered the chance to attend any event currently happening on your calendar. " + 
+       "\nType the number next to the event you wish to attend and you will be transported there." + 
+       "\nEnya: What is my goal here? How do I win the game?" + 
+       "\nComputer: Today is meant for exploring. Just wander around today, I will explain the details tomorrow morning. Your daily schedule is on the left side of the screen. Choose carefully, because you can't attend an event once it's half over.";
        changeView(3);
        keepOldDialogue = true;
       }
@@ -427,8 +425,8 @@ class Event {
         
     //Start of the location
     if(latestDialogue == null) {
-         latestDialogue = "C: Good morning and welcome to your second day in the game. Did you have a good time yesterday?"
-         +"\n1: No, that was horrible." + 
+         latestDialogue = "Computer: Good morning and welcome to your second day in the game. Did you have a good time yesterday?"
+         +"\n\n1: No, that was horrible." + 
          "\n2: Yes, I guess."; 
          
          dialogueResponseOptions = new String[]{
@@ -460,7 +458,7 @@ class Event {
   
   private void regularDayDorm(String keyPressed) {
       if(gatheredPuzzles.size() == 0) {
-        latestDialogue = "C: Welcome back to your dorm room. I\'m afraid there\'s not much to do here right now. Go find some prized items.";
+        latestDialogue = "Computer: Welcome back to your dorm room. I\'m afraid there\'s not much to do here right now. Go find some prized items.";
         changeView(3);
       }
       
@@ -491,9 +489,9 @@ class Event {
           }
           
           else {
-            latestDialogue = "You have acquired this many puzzles so far: " + gatheredPuzzles.size() + 
+            latestDialogue = "Computer: You have acquired this many puzzles so far: " + gatheredPuzzles.size() + 
             " and you have not solved at least 1. Would you like to solve the puzzle piece from " + unsolved.name + "?" + 
-            "\n1: Yes, take me to the puzzle\n2: No, I'm just here to take a nap.";
+            "\n\n1: Yes, take me to the puzzle\n2: No, I'm just here to take a nap.";
             
             dialogueResponseOptions = new String[]{
               "",
@@ -559,7 +557,7 @@ class Event {
       "\nEnya: Hey, Stefan. How's it going?" + 
       "\nStefan: Fine. Pretty chill. I have a couple deadlines next week, but since I already have a job lined up my motivation is pretty down." + 
       "\nEnya: That's so nice, it must take a lot of the stress out of your final semester." + 
-      "\nStefan: Definitely. I can't wait to move to London this summer! And I'm so glad I'm done with all those recruitment events. I heard JP Morgan did an event at Hotel Du Vin at noon today, but I'm already going to be working for Deutsche so I didn't bother going.";
+      "\nStefan: Definitely. I can't wait to move to London this summer! And I'm so glad I'm done with all those recruitment events. I heard JP Morgan did an event at Hotel Du Vin at noon today, but I'm already going to be working for Deutsche Bank so I didn't bother going.";
 
       
       //Now know about JP Morgan talk
@@ -675,7 +673,7 @@ class Event {
       latestDialogue += "\nEnya: Oh, right, yeah. It's too bad these events overlap." + 
       "\nMiri: Yeah, especially since Mr. De Sousa uses the Socratic method so there aren't any slides to summarize what we're missing. I wish he did give out slides, I'm not great at taking notes in real-time. My mark on the class test makes that clear enough." + 
       "\nEnya: Maybe you can get notes off one of our classmates and study them later." + 
-      "\nMiri: Yeah, maybe Stefan will give me his. I'll just have to text him early, because he'll be at that Disney pub quiz at the Adamson from 4pm.";
+      "\nMiri: Yeah, maybe Stefan will give me his. I'll just have to text him early, because he'll be at that Disney pub quiz at the Adamson starting at 4pm.";
       
       
       if(eventNameToTimes.get("Disney Pub Quiz (The Adamson)")[2] == 0) {
