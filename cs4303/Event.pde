@@ -503,9 +503,7 @@ class Event {
       "\nStefan: Fine. Pretty chill. I have a couple deadlines next week, but since I already have a job lined up my motivation is pretty down." + 
       "\nEnya: That's so nice, it must take a lot of the stress out of your final semester." + 
       "\nStefan: Definitely. I can't wait to move to London this summer! And I'm so glad I'm done with all those recruitment events. I heard JP Morgan did an event at Hotel Du Vin at noon today, but I'm already going to be working for Deutsche so I didn't bother going.";
-      
-      //Increment times seen today
-      people.namesToStats.get("Peter")[1]++;
+
       
       //Now know about JP Morgan talk
       if(eventNameToTimes.get("JP Morgan Talk (Hotel Du Vin)")[2] == 0) {

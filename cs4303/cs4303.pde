@@ -4,6 +4,8 @@ Header header;
 Block body;
 float portionHeader = 0.1;
 
+PFont gameFont;
+
 //Game status
 String[] possibleViews = {"LocStart", "InConvo", "DoingPuzzle", "EventEnd"}; //<>//
 
@@ -36,6 +38,9 @@ void setup() {
   
   
   fullScreen();
+  
+  gameFont = createFont("arial", 12);
+  textFont(gameFont);
   
   startTime = 8;
   sleepTime = 22;
