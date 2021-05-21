@@ -68,7 +68,7 @@ class Puzzle {
   
   //todo: adjust difficulty depending on whose puzzle it is
   //todo: set this to a reasonable default once done writing
-  for(int i = 0; i < 0; i++) {
+  for(int i = 0; i < 20; i++) {
     //Decide to change either x or y
     boolean moveX = random.nextBoolean();
     
@@ -142,6 +142,7 @@ class Puzzle {
  
  private void endOfPuzzle() {
   changeView(3);
+  solved = true;
   latestDialogue = "Congratulations! You've solved the puzzle from " + name + ".";
   currentPuzzle = null;
  }

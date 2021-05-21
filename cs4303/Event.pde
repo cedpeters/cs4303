@@ -140,9 +140,6 @@ class Event {
        latestDialogue += "\n*New fact gained: Peter misses his sister. *" ;
        people.namesToStats.get("Peter")[3] = 1;
       }
-
-      //Increment times seen today
-      people.namesToStats.get("Peter")[1]++;
       
       //If I know his favourite singer, add the option to discuss that.
       if(people.namesToStats.get("Stefan")[2] == 1) {
