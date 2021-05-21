@@ -17,6 +17,7 @@ class DoingPuzzle extends Block{
    textAlign(CENTER, CENTER);
     
    puzzleStats.draw("Puzzle Statistics");
-   puzzle.draw();
+   currentPuzzle.draw(puzzle);
+   //puzzle.draw(currentPuzzle.name);
  }
 }

@@ -101,7 +101,7 @@ void draw() {
     
     if(currentPuzzle == null) changeView(3);
     
-    currentPuzzle.draw();
+    bodyBlocks.get(currentView).draw();
   }
     
 }
